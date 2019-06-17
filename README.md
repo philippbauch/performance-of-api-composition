@@ -1,5 +1,15 @@
 # Performance of API-Composition in the context of GraphQL
 
+## Run on your local machine
+
+To run this project on your local machine, you have to have Docker Compose installed.
+
+If Docker Compose is installed correctly, you can just run:
+
+```bash
+docker-compose up -d
+```
+
 ## Data models
 
 ### User

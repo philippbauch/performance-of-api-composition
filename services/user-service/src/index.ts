@@ -1,7 +1,7 @@
 import db from "./db/manager";
 import userService from "./db/services/user.service";
-import { logger } from "./utils/logger";
 import restServer from "./rest";
+import { logger } from "./utils/logger";
 
 const DEFAULT_PORT = "8080";
 const DEFAULT_DB_NAME = "poac";

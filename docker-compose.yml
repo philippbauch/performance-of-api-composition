@@ -1,11 +1,11 @@
-version: '3'
-services: 
+version: "3"
+services:
   mongo-user:
     image: mongo
     restart: always
     volumes:
       - mongo-user-data:/data
-    environment: 
+    environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
 
@@ -14,13 +14,13 @@ services:
     links:
       - mongo-user:mongo
     restart: always
-    ports: 
-      - 8081:8081
-    environment: 
+    ports:
+      - 8080:8080
+    environment:
       DB_HOST: mongo
       DB_PORT: 27017
       DB_USER: root
       DB_PASSWORD: example
 
-volumes: 
+volumes:
   mongo-user-data:

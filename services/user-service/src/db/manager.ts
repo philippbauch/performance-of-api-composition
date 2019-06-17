@@ -1,4 +1,5 @@
 import { Db, MongoClient } from "mongodb";
+import { logger } from "../utils/logger";
 
 export interface DatabaseConfig {
   auth?: {
@@ -17,6 +18,7 @@ class DatabaseManager {
 
   public async connect(config: DatabaseConfig) {
     const { auth, database, host, port } = config;
+    logger.info(`Connect to mongodb://${host}:${port}/${database}`);
     this.client = await MongoClient.connect(`mongodb://${host}:${port}`, {
       auth,
       useNewUrlParser: true

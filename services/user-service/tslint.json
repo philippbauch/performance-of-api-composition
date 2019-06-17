@@ -8,6 +8,7 @@
     "no-implicit-dependencies": false,
     "no-submodule-imports": false,
     "object-literal-sort-keys": false,
+    "one-variable-per-declaration": false,
     "quotemark": false,
     "trailing-comma": false,
     "variable-name": false
