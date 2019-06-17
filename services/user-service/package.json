@@ -1,12 +1,19 @@
 {
   "name": "user-service",
   "version": "1.0.0",
-  "description": "",
-  "scripts": {
-    "start": "ts-node -r tsconfig-paths/register -r dotenv/config ./src/server.ts",
-    "dev": "nodemon"
-  },
+  "description": "User Service",
   "author": "Philipp Bauch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/philippbauch/performance-of-api-composition"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:clean": "rm -rf dist && npm run build",
+    "build:watch": "tsc --watch",
+    "dev": "concurrently \"npm:build:watch\" \"nodemon\"",
+    "start": "node -r dotenv/config ./dist/index.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
@@ -23,10 +30,9 @@
     "@types/mongodb": "^3.1.26",
     "@types/node": "^12.0.0",
     "@types/winston": "^2.4.4",
+    "concurrently": "^4.1.0",
     "nodemon": "^1.19.0",
     "prettier": "^1.17.0",
-    "ts-node": "^8.1.0",
-    "tsconfig-paths": "^3.8.0",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
   }

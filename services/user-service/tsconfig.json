@@ -2,15 +2,11 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
     "outDir": "dist",
-    "paths": {
-      "@/*": ["src/*"]
-    },
+    "strict": true,
     "target": "es6"
   },
   "include": ["src/**/*.ts"],
