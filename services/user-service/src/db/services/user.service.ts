@@ -35,36 +35,20 @@ class UserService {
 
   /**
    *
-   * @param users
+   * @param _id
+   * @param update
    */
-  public async insertUsers(users: any[]) {
-    return this.Users!.insertMany(users);
+  public async updateUser(_id: ObjectId, update: any) {
+    return this.Users!.updateOne({ _id }, { $set: update });
   }
 
   /**
    *
    * @param _id
-   * @param user
    */
-  public async updateUser(_id: ObjectId, user: any) {}
-
-  /**
-   *
-   * @param users
-   */
-  public async updateUsers(users: any[]) {}
-
-  /**
-   *
-   * @param _id
-   */
-  public async deleteUser(_id: ObjectId) {}
-
-  /**
-   *
-   * @param users
-   */
-  public async deleteUsers(users: any[]) {}
+  public async deleteUser(_id: ObjectId) {
+    return this.Users!.deleteOne({ _id });
+  }
 }
 
 export default new UserService();

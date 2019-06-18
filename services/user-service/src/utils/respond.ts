@@ -15,7 +15,7 @@ class Respond {
   }
 
   public with<P = any>(
-    ok: boolean,
+    ok: number,
     status: number,
     message?: string,
     payload?: P | P[]
@@ -28,8 +28,8 @@ class Respond {
     this.response.send({
       ok,
       status,
-      message,
-      payload
+      ...(message && { message }),
+      ...(payload && { payload })
     });
   }
 }
