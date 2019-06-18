@@ -23,7 +23,7 @@ const logFormat = printf(({ level, message, timestamp: ts }) => {
   return `${ts} [${level}] : ${message}`;
 });
 
-export const logger = createLogger({
+const logger = createLogger({
   format: combine(
     uppercaseLevelFormat(),
     timestamp({
@@ -42,3 +42,5 @@ export const expressLogger = expressWinston.logger({
   winstonInstance: logger,
   msg: expressLoggerMessage
 });
+
+export default logger;

@@ -9,6 +9,6 @@
     "strict": true,
     "target": "es6"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.js"],
   "exclude": ["node_modules", ".vscode"]
 }

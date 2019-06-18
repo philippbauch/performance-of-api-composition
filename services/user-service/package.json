@@ -9,17 +9,19 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:clean": "rm -rf dist && npm run build",
+    "build:clean": "rm -rf dist && npm run build && npm run copy:proto",
     "build:watch": "tsc --watch",
+    "copy:proto": "mkdir -p dist/grpc && cp src/grpc/*.proto dist/grpc/",
     "dev": "concurrently \"npm:build:watch\" \"nodemon\"",
     "start": "node -r dotenv/config ./dist/index.js"
   },
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "@grpc/proto-loader": "^0.5.1",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
     "express": "^4.16.4",
     "express-winston": "^3.1.0",
+    "grpc": "^1.21.1",
     "mongodb": "^3.2.4",
     "winston": "^3.2.1"
   },

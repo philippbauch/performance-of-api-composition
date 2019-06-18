@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { logger } from "../utils/logger";
+import logger from "../utils/logger";
 
 export default { as };
 

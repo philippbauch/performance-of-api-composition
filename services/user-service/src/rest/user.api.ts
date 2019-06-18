@@ -1,7 +1,7 @@
 import express from "express";
 import { ObjectId } from "mongodb";
-import userService from "../../db/services/user.service";
-import respond from "../../utils/respond";
+import db from "../utils/db";
+import respond from "../utils/respond";
 
 const userApi = express.Router();
 
@@ -14,7 +14,7 @@ userApi.delete("/users/:id", deleteUser);
 async function getUsers(req: express.Request, res: express.Response) {
   let users, message, ok, status;
   try {
-    users = await userService.findUsers(req.query);
+    users = await db.findUsers(req.query);
     ok = 1;
     status = users.length > 0 ? 200 : 204;
   } catch (error) {
@@ -35,7 +35,7 @@ async function getUser(req: express.Request, res: express.Response) {
   } else {
     const _userId = ObjectId.createFromHexString(userId);
     try {
-      user = await userService.findUser(_userId);
+      user = await db.findUser(_userId);
       if (user) {
         ok = 1;
         status = 200;
@@ -57,10 +57,10 @@ async function postUser(req: express.Request, res: express.Response) {
   const payload = req.body;
   let inserted, message, ok, status;
   try {
-    const { ops, result } = await userService.insertUser(payload);
+    const { ops, result } = await db.insertUser(payload);
     ok = result.ok;
     status = ok ? 201 : 500;
-    inserted = ops.length > 1 ? ops : ops.length === 1 ? ops[0] : null;
+    inserted = ops.length === 1 ? ops[0] : null;
   } catch (error) {
     message = error;
     ok = 0;
@@ -80,7 +80,7 @@ async function putUser(req: express.Request, res: express.Response) {
   } else {
     const _userId = ObjectId.createFromHexString(userId);
     try {
-      const { result } = await userService.updateUser(_userId, payload);
+      const { result } = await db.updateUser(_userId, payload);
       if (result.n && result.n > 0) {
         ok = result.ok!;
         status = 200;
@@ -108,7 +108,7 @@ async function deleteUser(req: express.Request, res: express.Response) {
   } else {
     const _userId = ObjectId.createFromHexString(userId);
     try {
-      const { result } = await userService.deleteUser(_userId);
+      const { result } = await db.deleteUser(_userId);
       if (result.n && result.n > 0) {
         ok = result.ok!;
         status = 200;
