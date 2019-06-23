@@ -5,7 +5,8 @@ import {
   MongoClient,
   ObjectId
 } from "mongodb";
-import logger from "../utils/logger";
+import logger from "./logger";
+import { User } from "./User";
 
 export interface DatabaseConfig {
   auth?: {
@@ -43,16 +44,19 @@ class DatabaseManager {
    * @param query
    * @param options
    */
-  public async findUsers(query: FilterQuery<any>, options?: FindOneOptions) {
-    return this.Users!.find(query, options).toArray();
+  public async findUsers(
+    query: FilterQuery<any>,
+    options?: FindOneOptions
+  ): Promise<User[]> {
+    return this.Users!.find<User>(query, options).toArray();
   }
 
   /**
    *
    * @param _id
    */
-  public async findUser(_id: ObjectId) {
-    return this.Users!.findOne({ _id });
+  public async findUser(_id: ObjectId): Promise<User | null> {
+    return this.Users!.findOne<User>({ _id });
   }
 
   /**

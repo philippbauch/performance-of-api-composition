@@ -9,11 +9,11 @@
   },
   "scripts": {
     "build": "tsc",
-    "build:clean": "rm -rf dist && npm run build && npm run copy:proto",
+    "build:clean": "rm -rf dist && npm run build",
     "build:watch": "tsc --watch",
-    "copy:proto": "mkdir -p dist/grpc && cp src/grpc/*.proto dist/grpc/",
     "dev": "concurrently \"npm:build:watch\" \"nodemon\"",
-    "start": "node -r dotenv/config ./dist/index.js"
+    "start": "node -r dotenv/config ./dist/index.js",
+    "test": "node -r dotenv/config ./tests/index.js"
   },
   "dependencies": {
     "@grpc/proto-loader": "^0.5.1",

@@ -1,7 +1,7 @@
-import grpcServer, { grpcServerCredentials } from "./grpc";
-import restServer from "./rest";
-import db from "./utils/db";
-import logger from "./utils/logger";
+import db from "./db";
+import grpcServer, { grpcServerCredentials } from "./grpc.server";
+import logger from "./logger";
+import restServer from "./rest.server";
 
 const DEFAULT_REST_PORT = "8080";
 const DEFAULT_GRPC_PORT = "8081";
@@ -46,10 +46,10 @@ if (!DB_NAME) {
 
   logger.info("[1] Establish database connection");
 
-  try {
-    const auth = DB_USER &&
-      DB_PASSWORD && { user: DB_USER, password: DB_PASSWORD };
+  const auth = DB_USER &&
+    DB_PASSWORD && { user: DB_USER, password: DB_PASSWORD };
 
+  try {
     await db.connect({
       database: DB_NAME!,
       host: DB_HOST!,
@@ -76,7 +76,7 @@ if (!DB_NAME) {
   grpcServer.start();
 
   logger.info("[3] Start REST-Server");
-  restServer.listen(REST_PORT!, () => {
+  restServer.listen(REST_PORT, () => {
     logger.info(`REST-Server is running on port ${REST_PORT}`);
   });
 })();

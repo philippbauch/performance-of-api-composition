@@ -1,7 +1,7 @@
 import express from "express";
 import { ObjectId } from "mongodb";
-import db from "../utils/db";
-import respond from "../utils/respond";
+import db from "./db";
+import respond from "./utils/respond";
 
 const userApi = express.Router();
 
@@ -55,6 +55,10 @@ async function getUser(req: express.Request, res: express.Response) {
 
 async function postUser(req: express.Request, res: express.Response) {
   const payload = req.body;
+  if (!payload.favorites) {
+    payload.favorites = [];
+  }
+  delete payload._id;
   let inserted, message, ok, status;
   try {
     const { ops, result } = await db.insertUser(payload);
@@ -71,6 +75,7 @@ async function postUser(req: express.Request, res: express.Response) {
 
 async function putUser(req: express.Request, res: express.Response) {
   const payload = req.body;
+  delete payload._id;
   let message, ok, status;
   const { id: userId } = req.params;
   if (userId.length !== 24 || !ObjectId.isValid(userId)) {

@@ -1,7 +1,7 @@
 import cors from "cors";
 import express from "express";
-import { expressLogger } from "../utils/logger";
-import userApi from "./user.api";
+import { expressLogger } from "./logger";
+import userApi from "./rest.api";
 
 const app = express();
 
