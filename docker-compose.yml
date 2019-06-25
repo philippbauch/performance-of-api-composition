@@ -46,9 +46,6 @@ services:
     links:
       - mongo-user:mongo
     restart: always
-    ports:
-      - 8000:8000
-      - 4000:4000
     environment:
       DB_NAME: poac
       DB_HOST: mongo
@@ -60,6 +57,19 @@ services:
       PROTO_PATH: /usr/src/app/proto
 
   # Gateways
+
+  rest-gateway:
+    build: gateways/rest_gateway
+    links:
+      - user-service
+      # TODO: Add other services
+    restart: always
+    ports:
+      - 8000:8000
+    environment:
+      PORT: 8000
+      PROTO_PATH: /usr/src/app/proto
+      REST_PORT: 8000
 
   # Frontend
 
