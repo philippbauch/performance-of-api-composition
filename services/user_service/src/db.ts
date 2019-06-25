@@ -39,11 +39,6 @@ class DatabaseManager {
     }
   }
 
-  /**
-   *
-   * @param query
-   * @param options
-   */
   public async findUsers(
     query: FilterQuery<any>,
     options?: FindOneOptions
@@ -51,35 +46,18 @@ class DatabaseManager {
     return this.Users!.find<User>(query, options).toArray();
   }
 
-  /**
-   *
-   * @param _id
-   */
   public async findUser(_id: ObjectId): Promise<User | null> {
     return this.Users!.findOne<User>({ _id });
   }
 
-  /**
-   *
-   * @param user
-   */
   public async insertUser(user: any) {
     return this.Users!.insertOne(user);
   }
 
-  /**
-   *
-   * @param _id
-   * @param update
-   */
   public async updateUser(_id: ObjectId, update: any) {
     return this.Users!.updateOne({ _id }, { $set: update });
   }
 
-  /**
-   *
-   * @param _id
-   */
   public async deleteUser(_id: ObjectId) {
     return this.Users!.deleteOne({ _id });
   }
