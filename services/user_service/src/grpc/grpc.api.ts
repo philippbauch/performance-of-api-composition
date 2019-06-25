@@ -1,7 +1,7 @@
 import { handleUnaryCall, sendUnaryData, ServerUnaryCall } from "grpc";
 import { ObjectId } from "mongodb";
-import db from "./db";
-import { User } from "./User";
+import db from "../db";
+import { User } from "../models/User";
 
 interface GetUsersRequest {}
 

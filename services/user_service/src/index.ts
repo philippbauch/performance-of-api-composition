@@ -1,7 +1,7 @@
 import db from "./db";
-import grpcServer, { grpcServerCredentials } from "./grpc.server";
+import grpcServer, { grpcServerCredentials } from "./grpc/grpc.server";
 import logger from "./logger";
-import restServer from "./rest.server";
+import restServer from "./rest/rest.server";
 
 const DEFAULT_REST_PORT = "8080";
 const DEFAULT_GRPC_PORT = "8081";

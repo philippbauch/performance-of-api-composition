@@ -1,6 +1,7 @@
 import * as protoLoader from "@grpc/proto-loader";
 import * as grpc from "grpc";
 import path from "path";
+import logger from "../logger";
 import {
   deleteUser,
   getUser,
@@ -8,7 +9,6 @@ import {
   insertUser,
   updateUser
 } from "./grpc.api";
-import logger from "./logger";
 
 const { PROTO_PATH } = process.env;
 

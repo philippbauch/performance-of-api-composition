@@ -6,7 +6,7 @@ import {
   ObjectId
 } from "mongodb";
 import logger from "./logger";
-import { User } from "./User";
+import { User } from "./models/User";
 
 export interface DatabaseConfig {
   auth?: {

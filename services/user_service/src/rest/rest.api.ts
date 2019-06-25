@@ -1,7 +1,7 @@
 import express from "express";
 import { ObjectId } from "mongodb";
-import db from "./db";
-import respond from "./respond";
+import db from "../db";
+import respond from "../respond";
 
 const userApi = express.Router();
 
