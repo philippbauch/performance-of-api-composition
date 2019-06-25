@@ -1,5 +1,35 @@
 version: "3"
 services:
+
+  # Databases
+
+  mongo-reservation:
+    image: mongo
+    restart: always
+    volumes:
+      - mongo-reservation-data:/data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-restaurant:
+    image: mongo
+    restart: always
+    volumes:
+      - mongo-restaurant-data:/data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-review:
+    image: mongo
+    restart: always
+    volumes:
+      - mongo-review-data:/data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
   mongo-user:
     image: mongo
     restart: always
@@ -9,18 +39,32 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
 
+  # Services
+
   user-service:
-    build: services/user-service
+    build: services/user_service
     links:
       - mongo-user:mongo
     restart: always
     ports:
-      - 8080:8080
+      - 8000:8000
+      - 4000:4000
     environment:
+      DB_NAME: poac
       DB_HOST: mongo
       DB_PORT: 27017
       DB_USER: root
       DB_PASSWORD: example
+      GRPC_PORT: 4000
+      REST_PORT: 8000
+      PROTO_PATH: /usr/src/app/proto
+
+  # Gateways
+
+  # Frontend
 
 volumes:
   mongo-user-data:
+  mongo-reservation-data:
+  mongo-restaurant-data:
+  mongo-review-data:
