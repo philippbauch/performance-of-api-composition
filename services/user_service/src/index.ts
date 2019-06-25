@@ -65,7 +65,7 @@ if (!DB_NAME) {
 
   logger.info("[2] Start gRPC-Server");
   const boundPort = grpcServer.bind(
-    `localhost:${GRPC_PORT}`,
+    `0.0.0.0:${GRPC_PORT}`,
     grpcServerCredentials
   );
   if (boundPort === 0) {

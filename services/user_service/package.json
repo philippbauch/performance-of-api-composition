@@ -13,6 +13,7 @@
     "build:watch": "tsc --watch",
     "dev": "concurrently \"npm:build:watch\" \"nodemon\"",
     "start": "node -r dotenv/config ./dist/index.js",
+    "sync:proto": "./sync_proto.sh",
     "test": "node -r dotenv/config ./tests/index.js"
   },
   "dependencies": {

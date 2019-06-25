@@ -8,14 +8,20 @@ import {
   insertUser,
   updateUser
 } from "./grpc.api";
-import { projectRoot } from "./utils/projectRoot";
+import logger from "./logger";
 
-const PROTO_DIRNAME = "proto";
+const { PROTO_PATH } = process.env;
+
+if (!PROTO_PATH) {
+  logger.error("Environment variable PROTO_PATH is required");
+  process.exit(1);
+}
+
 const USER_PROTO = "user.proto";
 
 export const grpcServerCredentials = grpc.ServerCredentials.createInsecure();
 
-const userProtoPath = path.join(projectRoot, PROTO_DIRNAME, USER_PROTO);
+const userProtoPath = path.join(PROTO_PATH!, USER_PROTO);
 
 const userDefinitions = protoLoader.loadSync(userProtoPath);
 const userPackage = grpc.loadPackageDefinition(userDefinitions);

@@ -1,5 +1,9 @@
+.env
+.env.example
+.vscode
+dist
 logs
 node_modules
 npm-debug.log
-src
+sync_proto.sh
 tests

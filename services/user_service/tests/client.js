@@ -1,9 +1,15 @@
 const grpc = require("grpc");
 const protoLoader = require("@grpc/proto-loader");
-const { projectPath } = require("../dist/utils/projectPath");
 const path = require("path");
 
-const userProtoPath = path.join(projectPath, "proto", "user.proto");
+const { PROTO_PATH } = process.env;
+
+if (!PROTO_PATH) {
+  logger.error("Environment variable PROTO_PATH is required");
+  process.exit(1);
+}
+
+const userProtoPath = path.join(PROTO_PATH, "user.proto");
 
 const protoDefinition = protoLoader.loadSync(userProtoPath);
 const userProto = grpc.loadPackageDefinition(protoDefinition);
