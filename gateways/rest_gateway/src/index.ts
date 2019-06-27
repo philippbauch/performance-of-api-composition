@@ -1,7 +1,25 @@
 import { ApolloServer, gql } from "apollo-server";
 import logger from "./logger";
-import { User } from "./User";
-import { userResolver, usersResolver } from './user.resolver';
+import { User } from "./models/User";
+import { 
+  addressCityResolver,
+  addressHouseNumberResolver,
+  addressStreetResolver,
+  addressZipCodeResolver,
+  restaurantAddressResolver,
+  restaurantIdResolver,
+  restaurantNameResolver,
+  restaurantResolver,
+  restaurantsResolver,
+} from "./restaurant/restaurant.resolver";
+import { 
+  userEmailResolver,
+  userFirstNameResolver,
+  userIdResolver,
+  userLastNameResolver,
+  userResolver,
+  usersResolver,
+} from './user/user.resolver';
 
 const DEFAULT_PORT = "8000";
 
@@ -18,13 +36,13 @@ const typeDefs = gql`
     email: String
     firstName: String
     lastName: String
-    favorites: [Restaurant]
+    reservations: [Reservation]
     reviews: [Review]
   }
 
   type Address {
     street: String
-    houseInt: Int
+    houseNumber: Int
     city: String
     zipCode: String
   }
@@ -34,6 +52,7 @@ const typeDefs = gql`
     name: String
     address: Address
     reviews: [Review]
+    reservations: [Reservation]
   }
 
   type Review {
@@ -53,10 +72,16 @@ const typeDefs = gql`
   }
 
   type Query {
-    users(email: String, firstName: String, lastName: String): [User]
     user(id: String): User
-    restaurants: [Restaurant]
+    users(email: String, firstName: String, lastName: String): [User]
+
+    restaurant(id: String): Restaurant
+    restaurants(name: String): [Restaurant]
+
+    reservation(id: String): Reservation
     reservations: [Reservation]
+
+    review(id: String): Review
     reviews: [Review]
   }
 `;
@@ -65,9 +90,25 @@ const resolvers = {
   Query: {
     user: userResolver,
     users: usersResolver,
+    restaurant: restaurantResolver,
+    restaurants: restaurantsResolver
+  },
+  Address: {
+    street: addressStreetResolver,
+    houseNumber: addressHouseNumberResolver,
+    city: addressCityResolver,
+    zipCode: addressZipCodeResolver
+  },
+  Restaurant: {
+    id: restaurantIdResolver,
+    name: restaurantNameResolver,
+    address: restaurantAddressResolver
   },
   User: {
-    id: (user: User) => user._id
+    id: userIdResolver,
+    email: userEmailResolver,
+    firstName: userFirstNameResolver,
+    lastName: userLastNameResolver
   }
 };
 

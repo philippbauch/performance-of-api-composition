@@ -1,4 +1,4 @@
-import { User } from './User';
+import { User } from '../models/User';
 import {
   deleteUser,
   getUser,
@@ -24,7 +24,5 @@ export const userEmailResolver = (user: User) => user.email;
 export const userFirstNameResolver = (user: User) => user.firstName;
 
 export const userLastNameResolver = (user: User) => user.lastName;
-
-export const userFavoritesResolver = (user: User) => [] /* TODO */;
 
 export const userReviewsResolver = (user: User) => [] /* TODO */;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import logger from "./logger";
+import logger from "../logger";
 
 const DEFAULT_USER_HOST = "localhost";
 const DEFAULT_USER_PORT = "8080";

@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
-import axiosErrorHandler from "./axiosErrorHandler";
-import { User } from "./User";
+import { User } from "../models/User";
+import axiosErrorHandler from "../utils/axiosErrorHandler";
 import agent from "./user.agent";
 
 export interface QueryParams {
@@ -41,7 +41,7 @@ export function getUser(userId: string): Promise<User> {
 
 export function postUser(user: User) {
   return agent
-    .post("/projects", user)
+    .post("/users", user)
     .catch(axiosErrorHandler)
     .then(
       (response: AxiosResponse): User => {
@@ -57,7 +57,7 @@ export function postUser(user: User) {
 
 export function updateUser(user: User) {
   return agent
-    .put(`/projects/${user._id}`, user)
+    .put(`/users/${user._id}`, user)
     .catch(axiosErrorHandler)
     .then((response: AxiosResponse): void => {
       const { data, statusText } = response;
