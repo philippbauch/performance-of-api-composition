@@ -12,11 +12,14 @@ message User {
     required string email = 1;
     string firstName = 2;
     string lastName = 3;
-    repeated string favorites = 5;
-    optional string _id = 6;
+    optional string _id = 4;
 }
 
-message GetUsersRequest {}
+message GetUsersRequest {
+    optional string email = 1;
+    optional string firstName = 2;
+    optional string lastName = 3;
+}
 
 message GetUsersResponse {
     repeated User users = 1;

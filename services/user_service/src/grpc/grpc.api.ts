@@ -75,9 +75,6 @@ export const insertUser: handleUnaryCall<
   callback: sendUnaryData<InsertUserResponse>
 ) => {
   const { user } = call.request;
-  if (!user.favorites) {
-    user.favorites = [];
-  }
   delete user._id;
   try {
     const { ops, result } = await db.insertUser(user);

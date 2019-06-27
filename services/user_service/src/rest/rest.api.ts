@@ -55,9 +55,6 @@ async function getUser(req: express.Request, res: express.Response) {
 
 async function postUser(req: express.Request, res: express.Response) {
   const payload = req.body;
-  if (!payload.favorites) {
-    payload.favorites = [];
-  }
   delete payload._id;
   let inserted, message, ok, status;
   try {
