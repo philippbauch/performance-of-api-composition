@@ -16,7 +16,11 @@ message User {
     optional string _id = 6;
 }
 
-message GetUsersRequest {}
+message GetUsersRequest {
+    optional string email = 1;
+    optional string firstName = 2;
+    optional string lastName = 3;
+}
 
 message GetUsersResponse {
     repeated User users = 1;

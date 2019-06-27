@@ -1,4 +1,3 @@
-import expressWinston from "express-winston";
 import { createLogger, format, transports } from "winston";
 
 const { combine, printf, timestamp } = format;
@@ -33,14 +32,6 @@ const logger = createLogger({
   ),
   level: "info",
   transports: [transportCombined, transportConsole, transportError]
-});
-
-const expressLoggerMessage =
-  "HTTP {{res.statusCode}} {{req.method}} '{{req.url}}' ({{res.responseTime}}ms)";
-
-export const expressLogger = expressWinston.logger({
-  winstonInstance: logger,
-  msg: expressLoggerMessage
 });
 
 export default logger;

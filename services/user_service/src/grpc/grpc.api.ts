@@ -3,7 +3,11 @@ import { ObjectId } from "mongodb";
 import db from "../db";
 import { User } from "../models/User";
 
-interface GetUsersRequest {}
+interface GetUsersRequest {
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+}
 
 interface GetUsersResponse {
   users: User[];
@@ -16,8 +20,9 @@ export const getUsers: handleUnaryCall<
   call: ServerUnaryCall<GetUsersRequest>,
   callback: sendUnaryData<GetUsersResponse>
 ) => {
+  const { email, firstName, lastName } = call.request;
   try {
-    const users = await db.findUsers({});
+    const users = await db.findUsers({ email, firstName, lastName});
     callback(null, { users });
   } catch (error) {
     callback(error, null);
@@ -36,7 +41,7 @@ export const getUser: handleUnaryCall<GetUserRequest, GetUserResponse> = async (
   call: ServerUnaryCall<GetUserRequest>,
   callback: sendUnaryData<GetUserResponse>
 ) => {
-  const userId = call.request._id;
+  const { _id: userId } = call.request;
   if (userId.length !== 24 || !ObjectId.isValid(userId)) {
     callback(new Error(`Invalid ObjectId: ${userId}`), null);
   } else {
@@ -69,7 +74,7 @@ export const insertUser: handleUnaryCall<
   call: ServerUnaryCall<InsertUserRequest>,
   callback: sendUnaryData<InsertUserResponse>
 ) => {
-  const user = call.request.user;
+  const { user } = call.request;
   if (!user.favorites) {
     user.favorites = [];
   }
@@ -100,8 +105,7 @@ export const updateUser: handleUnaryCall<
   call: ServerUnaryCall<UpdateUserRequest>,
   callback: sendUnaryData<UpdateUserResponse>
 ) => {
-  const userId = call.request._id;
-  const user = call.request.user;
+  const { _id: userId, user } = call.request;
   delete user._id;
   if (userId.length !== 24 || !ObjectId.isValid(userId)) {
     callback(new Error(`Invalid ObjectId: ${userId}`), null);
@@ -133,7 +137,7 @@ export const deleteUser: handleUnaryCall<
   call: ServerUnaryCall<DeleteUserRequest>,
   callback: sendUnaryData<DeleteUserResponse>
 ) => {
-  const userId = call.request._id;
+  const { _id: userId } = call.request;
   if (userId.length !== 24 || !ObjectId.isValid(userId)) {
     callback(new Error(`Invalid ObjectId: ${userId}`), null);
   } else {
