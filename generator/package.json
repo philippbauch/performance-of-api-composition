@@ -1,0 +1,37 @@
+{
+  "name": "generator",
+  "version": "1.0.0",
+  "description": "Generate fake data and insert it into the databases",
+  "author": "Philipp Bauch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/philippbauch/performance-of-api-composition"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:clean": "rm -rf dist && npm run build",
+    "build:watch": "tsc --watch",
+    "dev": "concurrently \"npm:build:watch\" \"nodemon\"",
+    "start": "node ./dist/index.js"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "chalk": "^2.4.2",
+    "dotenv": "^8.0.0",
+    "faker": "^4.1.0",
+    "inquirer": "^6.4.1",
+    "progress": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/faker": "^4.1.5",
+    "@types/inquirer": "^6.0.3",
+    "@types/node": "^12.0.0",
+    "@types/progress": "^2.0.3",
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.17.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
+  }
+}
