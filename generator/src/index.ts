@@ -7,6 +7,11 @@ import inquirer from "inquirer";
 import ProgressBar from "progress";
 import { Restaurant } from "./models/Restaurant";
 import { User } from "./models/User";
+import {
+  deleteRestaurant,
+  getRestaurants,
+  postRestaurant
+} from "./restaurant/restaurant.api";
 import { deleteUser, getUsers, postUser } from "./user/user.api";
 
 const DEFAULT_USERS = 1000;
@@ -118,6 +123,99 @@ const DEFAULT_RESERVATIONS = 0.05;
     }
   } else {
     console.log("[ ] Number of users to generate is 0");
+    console.log("[ ] Skip");
+  }
+
+  // --------------------------------------------------------------------------
+
+  console.log("[ ] Look for existing restaurants");
+  try {
+    const restaurants = await getRestaurants({});
+    if (restaurants.length > 0) {
+      console.log(
+        chalk.green(`[+] Found ${restaurants.length} existing restaurants`)
+      );
+      const { overwrite } = await inquirer.prompt({
+        type: "confirm",
+        name: "overwrite",
+        message: "Do you want to overwrite the existing restaurants?",
+        default: true
+      });
+      if (overwrite) {
+        console.log("[ ] Delete existing restaurants");
+        const deleteRestaurantsProgress = new ProgressBar(
+          `[ ] Deleting [:bar] :current/${restaurants.length}`,
+          {
+            complete: "=",
+            incomplete: " ",
+            width: 50,
+            total: restaurants.length
+          }
+        );
+        for (const { _id: restaurantId } of restaurants) {
+          try {
+            await deleteRestaurant(restaurantId!);
+          } catch (error) {
+            deleteRestaurantsProgress.interrupt(
+              chalk.red(`[-] Error: ${error}`)
+            );
+          }
+          deleteRestaurantsProgress.tick();
+        }
+        if (deleteRestaurantsProgress.complete) {
+          console.log(chalk.green("[+] Done"));
+        } else {
+          console.log(chalk.yellow("[!] Progress not completed"));
+        }
+      }
+    } else {
+      console.log(chalk.green("[+] No restaurants found"));
+    }
+  } catch (error) {
+    console.log(
+      chalk.red(`[-] Failed to fetch existing restaurants: ${error}`)
+    );
+    console.log("[ ] Proceed");
+  }
+
+  const restaurants: Restaurant[] = [];
+
+  if (restaurantsAmount > 0) {
+    console.log("[ ] Generate fake restaurants");
+    const restaurantProgress = new ProgressBar(
+      `[ ] Generating [:bar] :current/${restaurantsAmount}`,
+      {
+        complete: "=",
+        incomplete: " ",
+        width: 50,
+        total: restaurantsAmount
+      }
+    );
+    for (let i = 0; i < restaurantsAmount!; i++) {
+      const restaurant: Restaurant = {
+        name: faker.company.companyName(),
+        address: {
+          streetName: faker.address.streetName(),
+          houseNumber: Math.floor(Math.random() * 100) + 1,
+          city: faker.address.city(),
+          zipCode: faker.address.zipCode()
+        }
+      };
+      try {
+        const inserted = await postRestaurant(restaurant);
+        restaurants.push(inserted);
+      } catch (error) {
+        restaurantProgress.interrupt(chalk.red(`[-] Error: ${error}`));
+      }
+      restaurantProgress.tick();
+    }
+    if (restaurantProgress.complete) {
+      console.log(chalk.green("[+] Done"));
+    } else {
+      console.log(chalk.yellow("[!] Progress not completed"));
+    }
+  } else {
+    console.log("[ ] Number of restaurants to generate is 0");
     console.log("[ ] Skip");
   }
 })();

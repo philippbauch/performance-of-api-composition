@@ -1,5 +1,4 @@
 import axios from "axios";
-import logger from "../logger";
 
 const DEFAULT_USER_HOST = "localhost";
 const DEFAULT_USER_PORT = "8080";
@@ -7,14 +6,14 @@ const DEFAULT_USER_PORT = "8080";
 let { USER_HOST, USER_PORT } = process.env;
 
 if (!USER_HOST) {
-  logger.warn(
+  console.log(
     `No USER_HOST specified - use default value '${DEFAULT_USER_HOST}'`
   );
   USER_HOST = DEFAULT_USER_HOST;
 }
 
 if (!USER_PORT) {
-  logger.warn(
+  console.log(
     `No USER_PORT specified - use default value '${DEFAULT_USER_PORT}'`
   );
   USER_PORT = DEFAULT_USER_PORT;

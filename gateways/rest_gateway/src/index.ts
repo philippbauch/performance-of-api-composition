@@ -1,25 +1,25 @@
 import { ApolloServer, gql } from "apollo-server";
 import logger from "./logger";
 import { User } from "./models/User";
-import { 
+import {
   addressCityResolver,
   addressHouseNumberResolver,
-  addressStreetResolver,
+  addressStreetNameResolver,
   addressZipCodeResolver,
   restaurantAddressResolver,
   restaurantIdResolver,
   restaurantNameResolver,
   restaurantResolver,
-  restaurantsResolver,
+  restaurantsResolver
 } from "./restaurant/restaurant.resolver";
-import { 
+import {
   userEmailResolver,
   userFirstNameResolver,
   userIdResolver,
   userLastNameResolver,
   userResolver,
-  usersResolver,
-} from './user/user.resolver';
+  usersResolver
+} from "./user/user.resolver";
 
 const DEFAULT_PORT = "8000";
 
@@ -41,7 +41,7 @@ const typeDefs = gql`
   }
 
   type Address {
-    street: String
+    streetName: String
     houseNumber: Int
     city: String
     zipCode: String
@@ -94,7 +94,7 @@ const resolvers = {
     restaurants: restaurantsResolver
   },
   Address: {
-    street: addressStreetResolver,
+    streetName: addressStreetNameResolver,
     houseNumber: addressHouseNumberResolver,
     city: addressCityResolver,
     zipCode: addressZipCodeResolver

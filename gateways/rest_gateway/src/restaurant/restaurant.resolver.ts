@@ -21,7 +21,7 @@ export const restaurantNameResolver = (restaurant: Restaurant) => restaurant.nam
 
 export const restaurantAddressResolver = (restaurant: Restaurant) => restaurant.address;
 
-export const addressStreetResolver = (address: Address) => address.street;
+export const addressStreetNameResolver = (address: Address) => address.streetName;
 
 export const addressHouseNumberResolver = (address: Address) => address.houseNumber;
 
