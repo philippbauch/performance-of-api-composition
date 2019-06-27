@@ -18,7 +18,8 @@ import {
   restaurantIdResolver,
   restaurantNameResolver,
   restaurantResolver,
-  restaurantsResolver
+  restaurantsResolver,
+  restaurantReservationsResolver
 } from "./restaurant/restaurant.resolver";
 import {
   userEmailResolver,
@@ -120,7 +121,8 @@ const resolvers = {
   Restaurant: {
     id: restaurantIdResolver,
     name: restaurantNameResolver,
-    address: restaurantAddressResolver
+    address: restaurantAddressResolver,
+    reservations: restaurantReservationsResolver
   },
   User: {
     id: userIdResolver,

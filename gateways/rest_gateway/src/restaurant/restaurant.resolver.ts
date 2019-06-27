@@ -1,5 +1,6 @@
 import { Address } from '../models/Address';
 import { Restaurant } from '../models/Restaurant';
+import { getReservations } from '../reservation/reservation.api';
 import {
   getRestaurant,
   getRestaurants,
@@ -20,6 +21,11 @@ export const restaurantIdResolver = (restaurant: Restaurant) => restaurant._id;
 export const restaurantNameResolver = (restaurant: Restaurant) => restaurant.name;
 
 export const restaurantAddressResolver = (restaurant: Restaurant) => restaurant.address;
+
+export const restaurantReservationsResolver = (restaurant: Restaurant) => {
+  const { _id: restaurantId } = restaurant;
+  return getReservations({ restaurantId });
+};
 
 export const addressStreetNameResolver = (address: Address) => address.streetName;
 
