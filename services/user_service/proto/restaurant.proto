@@ -8,18 +8,18 @@ service RestaurantService {
     rpc DeleteRestaurant (DeleteRestaurantRequest) returns (DeleteRestaurantResponse) {}
 }
 
-message Restaurant {
-    required string name = 1;
-    string Address address = 2;
-    string lastName = 3;
-    optional string _id = 4;
-}
-
 message Address {
     string street = 1;
     int32 houseNumber = 2;
     string city = 3;
     string zipCode = 4;
+}
+
+message Restaurant {
+    required string name = 1;
+    Address address = 2;
+    string lastName = 3;
+    optional string _id = 4;
 }
 
 message GetRestaurantsRequest {
