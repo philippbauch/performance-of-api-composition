@@ -12,7 +12,6 @@ message User {
     required string email = 1;
     string firstName = 2;
     string lastName = 3;
-    string password = 4;
     repeated string favorites = 5;
     optional string _id = 6;
 }
