@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
-import axiosErrorHandler from "./axiosErrorHandler";
-import { User } from "./User";
+import axiosErrorHandler from "../axiosErrorHandler";
+import { User } from "../models/User";
 import agent from "./user.agent";
 
 export interface QueryParams {

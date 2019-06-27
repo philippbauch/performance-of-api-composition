@@ -5,8 +5,9 @@ import chalk from "chalk";
 import faker from "faker";
 import inquirer from "inquirer";
 import ProgressBar from "progress";
-import { User } from "./User";
-import { deleteUser, getUsers, postUser } from "./user.api";
+import { Restaurant } from "./models/Restaurant";
+import { User } from "./models/User";
+import { deleteUser, getUsers, postUser } from "./user/user.api";
 
 const DEFAULT_USERS = 1000;
 const DEFAULT_RESTAURANTS = 100;
@@ -100,8 +101,7 @@ const DEFAULT_RESERVATIONS = 0.05;
       const user: User = {
         email: faker.internet.email(),
         firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-        favorites: []
+        lastName: faker.name.lastName()
       };
       try {
         const inserted = await postUser(user);
