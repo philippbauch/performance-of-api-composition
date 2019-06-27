@@ -75,6 +75,23 @@ services:
       REST_PORT: 8081
       PROTO_PATH: /usr/src/app/proto
 
+  reservation-service:
+    build: services/reservation_service
+    links:
+      - mongo-reservation:mongo
+    restart: always
+    ports:
+      - 8082:8082
+    environment:
+      DB_NAME: poac
+      DB_HOST: mongo
+      DB_PORT: 27017
+      DB_USER: root
+      DB_PASSWORD: example
+      GRPC_PORT: 4042
+      REST_PORT: 8082
+      PROTO_PATH: /usr/src/app/proto
+
   # Gateways
 
   rest-gateway:
@@ -82,16 +99,19 @@ services:
     links:
       - user-service
       - restaurant-service
+      - reservation-service
       # TODO: Add other services
     restart: always
     ports:
       - 8000:8000
     environment:
       PORT: 8000
-      USER_HOST: user-service
-      USER_PORT: 8080
+      RESERVATION_HOST: reservation-service
+      RESERVATION_PORT: 8082
       RESTAURANT_HOST: restaurant-service
       RESTAURANT_PORT: 8081
+      USER_HOST: user-service
+      USER_PORT: 8080
 
   # Frontend
 

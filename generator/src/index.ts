@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import chalk from "chalk";
+import Chance from "chance";
 import faker from "faker";
 import inquirer from "inquirer";
 import ProgressBar from "progress";
@@ -13,11 +14,14 @@ import {
   postRestaurant
 } from "./restaurant/restaurant.api";
 import { deleteUser, getUsers, postUser } from "./user/user.api";
+import {
+  postReservation,
+  getReservations,
+  deleteReservation
+} from "./reservation/reservation.api";
 
-const DEFAULT_USERS = 1000;
-const DEFAULT_RESTAURANTS = 100;
-const DEFAULT_REVIEWS = 0.1;
-const DEFAULT_RESERVATIONS = 0.05;
+const PROBABILITY_RESERVATION = 5;
+const PROBABILITY_REVIEW = 2;
 
 (async () => {
   const { usersAmount, restaurantsAmount } = await inquirer.prompt([
@@ -46,8 +50,9 @@ const DEFAULT_RESERVATIONS = 0.05;
   ]);
 
   console.log("[ ] Look for existing users");
+  let users: User[] = [];
   try {
-    const users = await getUsers({});
+    users = await getUsers({});
     if (users.length > 0) {
       console.log(chalk.green(`[+] Found ${users.length} existing users`));
       const { overwrite } = await inquirer.prompt({
@@ -80,6 +85,7 @@ const DEFAULT_RESERVATIONS = 0.05;
         } else {
           console.log(chalk.yellow("[!] Progress not completed"));
         }
+        users = [];
       }
     } else {
       console.log(chalk.green("[+] No users found"));
@@ -88,8 +94,6 @@ const DEFAULT_RESERVATIONS = 0.05;
     console.log(chalk.red(`[-] Failed to fetch existing users: ${error}`));
     console.log("[ ] Proceed");
   }
-
-  const users: User[] = [];
 
   if (usersAmount > 0) {
     console.log("[ ] Generate fake users");
@@ -129,8 +133,9 @@ const DEFAULT_RESERVATIONS = 0.05;
   // --------------------------------------------------------------------------
 
   console.log("[ ] Look for existing restaurants");
+  let restaurants: Restaurant[] = [];
   try {
-    const restaurants = await getRestaurants({});
+    restaurants = await getRestaurants({});
     if (restaurants.length > 0) {
       console.log(
         chalk.green(`[+] Found ${restaurants.length} existing restaurants`)
@@ -167,6 +172,7 @@ const DEFAULT_RESERVATIONS = 0.05;
         } else {
           console.log(chalk.yellow("[!] Progress not completed"));
         }
+        restaurants = [];
       }
     } else {
       console.log(chalk.green("[+] No restaurants found"));
@@ -177,8 +183,6 @@ const DEFAULT_RESERVATIONS = 0.05;
     );
     console.log("[ ] Proceed");
   }
-
-  const restaurants: Restaurant[] = [];
 
   if (restaurantsAmount > 0) {
     console.log("[ ] Generate fake restaurants");
@@ -217,5 +221,103 @@ const DEFAULT_RESERVATIONS = 0.05;
   } else {
     console.log("[ ] Number of restaurants to generate is 0");
     console.log("[ ] Skip");
+  }
+
+  if (users.length <= 0) {
+    console.log("[ ] Number of users is 0");
+    console.log("[ ] Quit");
+  } else if (restaurants.length <= 0) {
+    console.log("[ ] Number of restaurants is 0");
+    console.log("[ ] Quit");
+  } else {
+    const chance = new Chance();
+
+    console.log("[ ] Look for existing reservations");
+    try {
+      const reservations = await getReservations({});
+      if (reservations.length > 0) {
+        console.log(
+          chalk.green(`[+] Found ${reservations.length} existing reservations`)
+        );
+        const { overwrite } = await inquirer.prompt({
+          type: "confirm",
+          name: "overwrite",
+          message: "Do you want to overwrite the existing reservations?",
+          default: true
+        });
+        if (overwrite) {
+          console.log("[ ] Delete existing reservations");
+          const deleteReservationsProgress = new ProgressBar(
+            `[ ] Deleting [:bar] :current/${reservations.length}`,
+            {
+              complete: "=",
+              incomplete: " ",
+              width: 50,
+              total: reservations.length
+            }
+          );
+          for (const { _id: reservationId } of reservations) {
+            try {
+              await deleteReservation(reservationId!);
+            } catch (error) {
+              deleteReservationsProgress.interrupt(
+                chalk.red(`[-] Error: ${error}`)
+              );
+            }
+            deleteReservationsProgress.tick();
+          }
+          if (deleteReservationsProgress.complete) {
+            console.log(chalk.green("[+] Done"));
+          } else {
+            console.log(chalk.yellow("[!] Progress not completed"));
+          }
+        }
+      } else {
+        console.log(chalk.green("[+] No reservations found"));
+      }
+    } catch (error) {
+      console.log(
+        chalk.red(`[-] Failed to fetch existing reservations: ${error}`)
+      );
+      console.log("[ ] Proceed");
+    }
+
+    console.log("[ ] Generate fake reservations");
+    let reservationsCounter = 0;
+    const reservationProgress = new ProgressBar(
+      `[ ] Generating [:bar] :current/${users.length * restaurants.length}`,
+      {
+        complete: "=",
+        incomplete: " ",
+        width: 50,
+        total: users.length * restaurants.length
+      }
+    );
+    for (const user of users) {
+      for (const restaurant of restaurants) {
+        if (chance.bool({ likelihood: PROBABILITY_RESERVATION })) {
+          const reservation = {
+            date: faker.date.future().toUTCString(),
+            pax: Math.floor(Math.random() * 10) + 1,
+            userId: user._id!,
+            restaurantId: restaurant._id!
+          };
+          try {
+            await postReservation(reservation);
+            reservationsCounter++;
+          } catch (error) {
+            reservationProgress.interrupt(chalk.red(`[-] Error: ${error}`));
+          }
+        }
+        reservationProgress.tick();
+      }
+    }
+    if (reservationProgress.complete) {
+      console.log(
+        chalk.green(`[+] Generated ${reservationsCounter} reservations`)
+      );
+    } else {
+      console.log(chalk.yellow("[!] Progress not completed"));
+    }
   }
 })();

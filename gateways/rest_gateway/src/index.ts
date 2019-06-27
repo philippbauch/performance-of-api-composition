@@ -1,6 +1,14 @@
 import { ApolloServer, gql } from "apollo-server";
 import logger from "./logger";
-import { User } from "./models/User";
+import { 
+  reservationDateResolver,
+  reservationIdResolver,
+  reservationPaxResolver,
+  reservationResolver,
+  reservationRestaurantResolver,
+  reservationsResolver,
+  reservationUserResolver,
+} from "./reservation/reservation.resolver";
 import {
   addressCityResolver,
   addressHouseNumberResolver,
@@ -17,8 +25,9 @@ import {
   userFirstNameResolver,
   userIdResolver,
   userLastNameResolver,
+  userReservationsResolver,
   userResolver,
-  usersResolver
+  usersResolver,
 } from "./user/user.resolver";
 
 const DEFAULT_PORT = "8000";
@@ -67,7 +76,7 @@ const typeDefs = gql`
     id: ID
     user: User
     restaurant: Restaurant
-    timestamp: Int
+    date: String
     pax: Int
   }
 
@@ -90,6 +99,8 @@ const resolvers = {
   Query: {
     user: userResolver,
     users: usersResolver,
+    reservation: reservationResolver,
+    reservations: reservationsResolver,
     restaurant: restaurantResolver,
     restaurants: restaurantsResolver
   },
@@ -98,6 +109,13 @@ const resolvers = {
     houseNumber: addressHouseNumberResolver,
     city: addressCityResolver,
     zipCode: addressZipCodeResolver
+  },
+  Reservation: {
+    id: reservationIdResolver,
+    pax: reservationPaxResolver,
+    date: reservationDateResolver,
+    user: reservationUserResolver,
+    restaurant: reservationRestaurantResolver
   },
   Restaurant: {
     id: restaurantIdResolver,
@@ -108,7 +126,8 @@ const resolvers = {
     id: userIdResolver,
     email: userEmailResolver,
     firstName: userFirstNameResolver,
-    lastName: userLastNameResolver
+    lastName: userLastNameResolver,
+    reservations: userReservationsResolver
   }
 };
 

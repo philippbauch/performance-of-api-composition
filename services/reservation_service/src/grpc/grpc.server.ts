@@ -3,11 +3,11 @@ import * as grpc from "grpc";
 import path from "path";
 import logger from "../logger";
 import {
-  deleteRestaurant,
-  getRestaurant,
-  getRestaurants,
-  insertRestaurant,
-  updateRestaurant
+  deleteReservation,
+  getReservation,
+  getReservations,
+  insertReservation,
+  updateReservation
 } from "./grpc.api";
 
 const { PROTO_PATH } = process.env;
@@ -17,24 +17,24 @@ if (!PROTO_PATH) {
   process.exit(1);
 }
 
-const RESTAURANT_PROTO = "restaurant.proto";
+const RESTAURANT_PROTO = "reservation.proto";
 
 export const grpcServerCredentials = grpc.ServerCredentials.createInsecure();
 
-const restaurantProtoPath = path.join(PROTO_PATH!, RESTAURANT_PROTO);
+const reservationProtoPath = path.join(PROTO_PATH!, RESTAURANT_PROTO);
 
-const restaurantDefinitions = protoLoader.loadSync(restaurantProtoPath);
-const restaurantPackage = grpc.loadPackageDefinition(restaurantDefinitions);
+const reservationDefinitions = protoLoader.loadSync(reservationProtoPath);
+const reservationPackage = grpc.loadPackageDefinition(reservationDefinitions);
 
 const server = new grpc.Server();
 
 // @ts-ignore
-server.addService(restaurantPackage.RestaurantService.service, {
-  getRestaurants,
-  getRestaurant,
-  insertRestaurant,
-  updateRestaurant,
-  deleteRestaurant
+server.addService(reservationPackage.ReservationService.service, {
+  getReservations,
+  getReservation,
+  insertReservation,
+  updateReservation,
+  deleteReservation
 });
 
 export default server;

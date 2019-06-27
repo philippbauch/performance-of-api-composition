@@ -1,63 +1,62 @@
 import { AxiosResponse } from "axios";
-import { Restaurant } from "../models/Restaurant";
+import { Reservation } from "../models/Reservation";
 import axiosErrorHandler from "../utils/axiosErrorHandler";
-import agent from "./restaurant.agent";
+import agent from "./reservation.agent";
 
 export interface QueryParams {
-  name?: string;
+  userId?: string;
+  restaurantId?: string;
 }
 
-export async function getRestaurants(
-  params: QueryParams
-): Promise<Restaurant[]> {
+export async function getReservations(params: QueryParams): Promise<Reservation[]> {
   return agent
-    .get("/restaurants", { params })
+    .get("/reservations", { params })
     .catch(axiosErrorHandler)
-    .then((response: AxiosResponse): Restaurant[] => {
+    .then((response: AxiosResponse): Reservation[] => {
       const { data, statusText } = response;
       const { ok, status, message, payload } = data;
-      if ((status !== 200 && status !== 204) || !ok) {
+      if (status !== 200 && status !== 204 || !ok) {
         throw message || statusText;
       }
-      return payload as Restaurant[];
+      return payload as Reservation[];
     });
 }
 
-export function getRestaurant(restaurantId: string): Promise<Restaurant> {
+export function getReservation(reservationId: string): Promise<Reservation> {
   return agent
-    .get(`/restaurants/${restaurantId}`)
+    .get(`/reservations/${reservationId}`)
     .catch(axiosErrorHandler)
     .then(
-      (response: AxiosResponse): Restaurant => {
+      (response: AxiosResponse): Reservation => {
         const { data, statusText } = response;
         const { ok, status, message, payload } = data;
         if (status !== 200 || !ok) {
           throw message || statusText;
         }
-        return payload as Restaurant;
+        return payload as Reservation;
       }
     );
 }
 
-export function postRestaurant(restaurant: Restaurant) {
+export function postReservation(reservation: Reservation) {
   return agent
-    .post("/restaurants", restaurant)
+    .post("/reservations", reservation)
     .catch(axiosErrorHandler)
     .then(
-      (response: AxiosResponse): Restaurant => {
+      (response: AxiosResponse): Reservation => {
         const { data, statusText } = response;
         const { ok, status, message, payload } = data;
         if (status !== 201 || !ok) {
           throw message || statusText;
         }
-        return payload as Restaurant;
+        return payload as Reservation;
       }
     );
 }
 
-export function updateRestaurant(restaurant: Restaurant) {
+export function updateReservation(reservation: Reservation) {
   return agent
-    .put(`/restaurants/${restaurant._id}`, restaurant)
+    .put(`/reservations/${reservation._id}`, reservation)
     .catch(axiosErrorHandler)
     .then((response: AxiosResponse): void => {
       const { data, statusText } = response;
@@ -68,9 +67,9 @@ export function updateRestaurant(restaurant: Restaurant) {
     });
 }
 
-export function deleteRestaurant(restaurantId: string) {
+export function deleteReservation(reservationId: string) {
   return agent
-    .delete(`/restaurants/${restaurantId}`)
+    .delete(`/reservations/${reservationId}`)
     .catch(axiosErrorHandler)
     .then((response: AxiosResponse): void => {
       const { data, statusText } = response;
