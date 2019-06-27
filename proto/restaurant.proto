@@ -9,7 +9,7 @@ service RestaurantService {
 }
 
 message Address {
-    string street = 1;
+    string streetName = 1;
     int32 houseNumber = 2;
     string city = 3;
     string zipCode = 4;

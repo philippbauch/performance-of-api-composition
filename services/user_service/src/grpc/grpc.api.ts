@@ -22,7 +22,7 @@ export const getUsers: handleUnaryCall<
 ) => {
   const { email, firstName, lastName } = call.request;
   try {
-    const users = await db.findUsers({ email, firstName, lastName});
+    const users = await db.findUsers({ email, firstName, lastName });
     callback(null, { users });
   } catch (error) {
     callback(error, null);
