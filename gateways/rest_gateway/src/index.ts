@@ -1,5 +1,7 @@
 import { ApolloServer, gql } from "apollo-server";
 import logger from "./logger";
+import { User } from "./User";
+import { userResolver, usersResolver } from './user.resolver';
 
 const DEFAULT_PORT = "8000";
 
@@ -10,27 +12,12 @@ if (!PORT) {
   PORT = DEFAULT_PORT;
 }
 
-// This is a (sample) collection of books we'll be able to query
-// the GraphQL server for.  A more complete example might fetch
-// from an existing data source like a REST API or database.
-const users = [
-  {
-    title: "Harry Potter and the Chamber of Secrets",
-    author: "J.K. Rowling"
-  },
-  {
-    title: "Jurassic Park",
-    author: "Michael Crichton"
-  }
-];
-
 const typeDefs = gql`
   type User {
     id: ID
     email: String
     firstName: String
     lastName: String
-    password: String
     favorites: [Restaurant]
     reviews: [Review]
   }
@@ -66,7 +53,8 @@ const typeDefs = gql`
   }
 
   type Query {
-    users: [User]
+    users(email: String, firstName: String, lastName: String): [User]
+    user(id: String): User
     restaurants: [Restaurant]
     reservations: [Reservation]
     reviews: [Review]
@@ -75,7 +63,11 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    users: () => users
+    user: userResolver,
+    users: usersResolver,
+  },
+  User: {
+    id: (user: User) => user._id
   }
 };
 
