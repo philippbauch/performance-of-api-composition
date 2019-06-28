@@ -7,16 +7,14 @@ export interface QueryParams {
   name?: string;
 }
 
-export async function getRestaurants(
-  params: QueryParams
-): Promise<Restaurant[]> {
+export async function getRestaurants(params: QueryParams): Promise<Restaurant[]> {
   return agent
     .get("/restaurants", { params })
     .catch(axiosErrorHandler)
     .then((response: AxiosResponse): Restaurant[] => {
       const { data, statusText } = response;
       const { ok, status, message, payload } = data;
-      if ((status !== 200 && status !== 204) || !ok) {
+      if (status !== 200 && status !== 204 || !ok) {
         throw message || statusText;
       }
       return payload as Restaurant[];

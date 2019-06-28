@@ -16,7 +16,7 @@ export async function getUsers(params: QueryParams): Promise<User[]> {
     .then((response: AxiosResponse): User[] => {
       const { data, statusText } = response;
       const { ok, status, message, payload } = data;
-      if ((status !== 200 && status !== 204) || !ok) {
+      if (status !== 200 && status !== 204 || !ok) {
         throw message || statusText;
       }
       return payload as User[];
