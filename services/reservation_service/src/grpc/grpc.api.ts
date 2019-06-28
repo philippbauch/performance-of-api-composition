@@ -20,12 +20,13 @@ export const getReservations: handleUnaryCall<
   callback: sendUnaryData<GetReservationsResponse>
 ) => {
   const { userId, restaurantId } = call.request;
-  const _userId = userId ? ObjectId.createFromHexString(userId) : undefined;
-  const _restaurantId = restaurantId ? ObjectId.createFromHexString(restaurantId) : undefined;
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     const reservations = await db.findReservations({
-      userId: _userId,
-      restaurantId: _restaurantId
+      ...(_userId && { userId: _userId }),
+      ...(_restaurantId && { restaurantId: _restaurantId })
     });
     callback(null, { reservations });
   } catch (error) {
@@ -41,7 +42,10 @@ interface GetReservationResponse {
   reservation: Reservation;
 }
 
-export const getReservation: handleUnaryCall<GetReservationRequest, GetReservationResponse> = async (
+export const getReservation: handleUnaryCall<
+  GetReservationRequest,
+  GetReservationResponse
+> = async (
   call: ServerUnaryCall<GetReservationRequest>,
   callback: sendUnaryData<GetReservationResponse>
 ) => {
@@ -81,13 +85,14 @@ export const insertReservation: handleUnaryCall<
   const { reservation } = call.request;
   delete reservation._id;
   const { userId, restaurantId } = reservation;
-  const _userId = ObjectId.createFromHexString(userId);
-  const _restaurantId = ObjectId.createFromHexString(restaurantId);
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     const { ops, result } = await db.insertReservation({
       ...reservation,
-      userId: _userId,
-      restaurantId: _restaurantId
+      ...(_userId && { userId: _userId }),
+      ...(_restaurantId && { restaurantId: _restaurantId })
     });
     if (result.ok && ops.length === 1) {
       callback(null, { reservation: ops[0] });
@@ -116,8 +121,9 @@ export const updateReservation: handleUnaryCall<
   const { _id: reservationId, reservation } = call.request;
   delete reservation._id;
   const { userId, restaurantId } = reservation;
-  const _userId = ObjectId.createFromHexString(userId);
-  const _restaurantId = ObjectId.createFromHexString(restaurantId);
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   if (reservationId.length !== 24 || !ObjectId.isValid(reservationId)) {
     callback(new Error(`Invalid ObjectId: ${reservationId}`), null);
   } else {
@@ -125,8 +131,8 @@ export const updateReservation: handleUnaryCall<
     try {
       const { result } = await db.updateReservation(_reservationId, {
         ...reservation,
-        userId: _userId,
-        restaurantId: _restaurantId
+        ...(_userId && { userId: _userId }),
+        ...(_restaurantId && { restaurantId: _restaurantId })
       });
       if (result.n && result.n > 0) {
         callback(null, null);

@@ -13,13 +13,14 @@ reservationApi.delete("/reservations/:id", deleteReservation);
 
 async function getReservations(req: express.Request, res: express.Response) {
   let reservations, message, ok, status;
+  const { userId, restaurantId } = req.query;
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
-    const { userId, restaurantId } = req.query;
-    const _userId = userId ? ObjectId.createFromHexString(userId) : undefined;
-    const _restaurantId = restaurantId ? ObjectId.createFromHexString(restaurantId) : undefined;
     reservations = await db.findReservations({
-      userId: _userId,
-      restaurantId: _restaurantId
+      ...(_userId && { userId: _userId }),
+      ...(_restaurantId && { restaurantId: _restaurantId })
     });
     ok = 1;
     status = reservations.length > 0 ? 200 : 204;
@@ -63,14 +64,15 @@ async function postReservation(req: express.Request, res: express.Response) {
   const payload = req.body;
   delete payload._id;
   let inserted, message, ok, status;
+  const { userId, restaurantId } = payload;
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
-    const { userId, restaurantId } = payload;
-    const _userId = ObjectId.createFromHexString(userId);
-    const _restaurantId = ObjectId.createFromHexString(restaurantId);
     const { ops, result } = await db.insertReservation({
       ...payload,
-      userId: _userId,
-      restaurantId: _restaurantId
+      ...(_userId && { userId: _userId }),
+      ...(_restaurantId && { restaurantId: _restaurantId })
     });
     ok = result.ok;
     status = ok ? 201 : 500;
@@ -88,20 +90,21 @@ async function putReservation(req: express.Request, res: express.Response) {
   delete payload._id;
   let message, ok, status;
   const { id: reservationId } = req.params;
+  const { userId, restaurantId } = req.query;
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   if (reservationId.length !== 24 || !ObjectId.isValid(reservationId)) {
     message = `Invalid ObjectId: ${reservationId}`;
     ok = 0;
     status = 400;
   } else {
     const _reservationId = ObjectId.createFromHexString(reservationId);
-    const { userId, restaurantId } = payload;
-    const _userId = ObjectId.createFromHexString(userId);
-    const _restaurantId = ObjectId.createFromHexString(restaurantId);
     try {
       const { result } = await db.updateReservation(_reservationId, {
         ...payload,
-        userId: _userId,
-        restaurantId: _restaurantId
+        ...(_userId && { userId: _userId }),
+        ...(_restaurantId && { restaurantId: _restaurantId })
       });
       if (result.n && result.n > 0) {
         ok = result.ok!;
