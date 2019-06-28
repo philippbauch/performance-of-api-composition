@@ -19,6 +19,7 @@ import {
   getReservations,
   deleteReservation
 } from "./reservation/reservation.api";
+import { getReviews, deleteReview, postReview } from "./review/review.api";
 
 const PROBABILITY_RESERVATION = 5;
 const PROBABILITY_REVIEW = 2;
@@ -316,6 +317,88 @@ const PROBABILITY_REVIEW = 2;
       console.log(
         chalk.green(`[+] Generated ${reservationsCounter} reservations`)
       );
+    } else {
+      console.log(chalk.yellow("[!] Progress not completed"));
+    }
+
+    console.log("[ ] Look for existing reviews");
+    try {
+      const reviews = await getReviews({});
+      if (reviews.length > 0) {
+        console.log(
+          chalk.green(`[+] Found ${reviews.length} existing reviews`)
+        );
+        const { overwrite } = await inquirer.prompt({
+          type: "confirm",
+          name: "overwrite",
+          message: "Do you want to overwrite the existing reviews?",
+          default: true
+        });
+        if (overwrite) {
+          console.log("[ ] Delete existing reviews");
+          const deleteReviewsProgress = new ProgressBar(
+            `[ ] Deleting [:bar] :current/${reviews.length}`,
+            {
+              complete: "=",
+              incomplete: " ",
+              width: 50,
+              total: reviews.length
+            }
+          );
+          for (const { _id: reviewId } of reviews) {
+            try {
+              await deleteReview(reviewId!);
+            } catch (error) {
+              deleteReviewsProgress.interrupt(chalk.red(`[-] Error: ${error}`));
+            }
+            deleteReviewsProgress.tick();
+          }
+          if (deleteReviewsProgress.complete) {
+            console.log(chalk.green("[+] Done"));
+          } else {
+            console.log(chalk.yellow("[!] Progress not completed"));
+          }
+        }
+      } else {
+        console.log(chalk.green("[+] No reviews found"));
+      }
+    } catch (error) {
+      console.log(chalk.red(`[-] Failed to fetch existing reviews: ${error}`));
+      console.log("[ ] Proceed");
+    }
+
+    console.log("[ ] Generate fake reviews");
+    let reviewsCounter = 0;
+    const reviewProgress = new ProgressBar(
+      `[ ] Generating [:bar] :current/${users.length * restaurants.length}`,
+      {
+        complete: "=",
+        incomplete: " ",
+        width: 50,
+        total: users.length * restaurants.length
+      }
+    );
+    for (const user of users) {
+      for (const restaurant of restaurants) {
+        if (chance.bool({ likelihood: PROBABILITY_RESERVATION })) {
+          const review = {
+            comment: faker.lorem.sentence(),
+            rating: Math.floor(Math.random() * 5) + 1,
+            userId: user._id!,
+            restaurantId: restaurant._id!
+          };
+          try {
+            await postReview(review);
+            reviewsCounter++;
+          } catch (error) {
+            reviewProgress.interrupt(chalk.red(`[-] Error: ${error}`));
+          }
+        }
+        reviewProgress.tick();
+      }
+    }
+    if (reviewProgress.complete) {
+      console.log(chalk.green(`[+] Generated ${reviewsCounter} reviews`));
     } else {
       console.log(chalk.yellow("[!] Progress not completed"));
     }

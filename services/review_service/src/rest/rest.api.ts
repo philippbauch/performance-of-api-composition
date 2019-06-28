@@ -3,50 +3,50 @@ import { ObjectId } from "mongodb";
 import db from "../db";
 import respond from "../respond";
 
-const reservationApi = express.Router();
+const reviewApi = express.Router();
 
-reservationApi.get("/reservations", getReservations);
-reservationApi.get("/reservations/:id", getReservation);
-reservationApi.post("/reservations", postReservation);
-reservationApi.put("/reservations/:id", putReservation);
-reservationApi.delete("/reservations/:id", deleteReservation);
+reviewApi.get("/reviews", getReviews);
+reviewApi.get("/reviews/:id", getReview);
+reviewApi.post("/reviews", postReview);
+reviewApi.put("/reviews/:id", putReview);
+reviewApi.delete("/reviews/:id", deleteReview);
 
-async function getReservations(req: express.Request, res: express.Response) {
-  let reservations, message, ok, status;
+async function getReviews(req: express.Request, res: express.Response) {
+  let reviews, message, ok, status;
   try {
     const { userId, restaurantId } = req.query;
     const _userId = userId ? ObjectId.createFromHexString(userId) : undefined;
     const _restaurantId = restaurantId ? ObjectId.createFromHexString(restaurantId) : undefined;
-    reservations = await db.findReservations({
+    reviews = await db.findReviews({
       userId: _userId,
       restaurantId: _restaurantId
     });
     ok = 1;
-    status = reservations.length > 0 ? 200 : 204;
+    status = reviews.length > 0 ? 200 : 204;
   } catch (error) {
     message = error;
     ok = 0;
     status = 500;
   }
-  respond.as(res).with(ok, status, message, reservations);
+  respond.as(res).with(ok, status, message, reviews);
 }
 
-async function getReservation(req: express.Request, res: express.Response) {
-  let reservation, message, ok, status;
-  const { id: reservationId } = req.params;
-  if (reservationId.length !== 24 || !ObjectId.isValid(reservationId)) {
-    message = `Invalid ObjectId: ${reservationId}`;
+async function getReview(req: express.Request, res: express.Response) {
+  let review, message, ok, status;
+  const { id: reviewId } = req.params;
+  if (reviewId.length !== 24 || !ObjectId.isValid(reviewId)) {
+    message = `Invalid ObjectId: ${reviewId}`;
     ok = 0;
     status = 400;
   } else {
-    const _reservationId = ObjectId.createFromHexString(reservationId);
+    const _reviewId = ObjectId.createFromHexString(reviewId);
     try {
-      reservation = await db.findReservation(_reservationId);
-      if (reservation) {
+      review = await db.findReview(_reviewId);
+      if (review) {
         ok = 1;
         status = 200;
       } else {
-        message = "Reservation does not exist";
+        message = "Review does not exist";
         ok = 0;
         status = 404;
       }
@@ -56,10 +56,10 @@ async function getReservation(req: express.Request, res: express.Response) {
       status = 500;
     }
   }
-  respond.as(res).with(ok, status, message, reservation);
+  respond.as(res).with(ok, status, message, review);
 }
 
-async function postReservation(req: express.Request, res: express.Response) {
+async function postReview(req: express.Request, res: express.Response) {
   const payload = req.body;
   delete payload._id;
   let inserted, message, ok, status;
@@ -67,7 +67,7 @@ async function postReservation(req: express.Request, res: express.Response) {
     const { userId, restaurantId } = payload;
     const _userId = ObjectId.createFromHexString(userId);
     const _restaurantId = ObjectId.createFromHexString(restaurantId);
-    const { ops, result } = await db.insertReservation({
+    const { ops, result } = await db.insertReview({
       ...payload,
       userId: _userId,
       restaurantId: _restaurantId
@@ -83,22 +83,22 @@ async function postReservation(req: express.Request, res: express.Response) {
   respond.as(res).with(ok, status, message, inserted);
 }
 
-async function putReservation(req: express.Request, res: express.Response) {
+async function putReview(req: express.Request, res: express.Response) {
   const payload = req.body;
   delete payload._id;
   let message, ok, status;
-  const { id: reservationId } = req.params;
-  if (reservationId.length !== 24 || !ObjectId.isValid(reservationId)) {
-    message = `Invalid ObjectId: ${reservationId}`;
+  const { id: reviewId } = req.params;
+  if (reviewId.length !== 24 || !ObjectId.isValid(reviewId)) {
+    message = `Invalid ObjectId: ${reviewId}`;
     ok = 0;
     status = 400;
   } else {
-    const _reservationId = ObjectId.createFromHexString(reservationId);
+    const _reviewId = ObjectId.createFromHexString(reviewId);
     const { userId, restaurantId } = payload;
     const _userId = ObjectId.createFromHexString(userId);
     const _restaurantId = ObjectId.createFromHexString(restaurantId);
     try {
-      const { result } = await db.updateReservation(_reservationId, {
+      const { result } = await db.updateReview(_reviewId, {
         ...payload,
         userId: _userId,
         restaurantId: _restaurantId
@@ -107,7 +107,7 @@ async function putReservation(req: express.Request, res: express.Response) {
         ok = result.ok!;
         status = 200;
       } else {
-        message = "Reservation does not exist";
+        message = "Review does not exist";
         ok = 0;
         status = 404;
       }
@@ -120,22 +120,22 @@ async function putReservation(req: express.Request, res: express.Response) {
   respond.as(res).with(ok, status, message, null);
 }
 
-async function deleteReservation(req: express.Request, res: express.Response) {
+async function deleteReview(req: express.Request, res: express.Response) {
   let message, ok, status;
-  const { id: reservationId } = req.params;
-  if (reservationId.length !== 24 || !ObjectId.isValid(reservationId)) {
-    message = `Invalid ObjectId: ${reservationId}`;
+  const { id: reviewId } = req.params;
+  if (reviewId.length !== 24 || !ObjectId.isValid(reviewId)) {
+    message = `Invalid ObjectId: ${reviewId}`;
     ok = 0;
     status = 400;
   } else {
-    const _reservationId = ObjectId.createFromHexString(reservationId);
+    const _reviewId = ObjectId.createFromHexString(reviewId);
     try {
-      const { result } = await db.deleteReservation(_reservationId);
+      const { result } = await db.deleteReview(_reviewId);
       if (result.n && result.n > 0) {
         ok = result.ok!;
         status = 200;
       } else {
-        message = "Reservation does not exist";
+        message = "Review does not exist";
         ok = 0;
         status = 404;
       }
@@ -148,4 +148,4 @@ async function deleteReservation(req: express.Request, res: express.Response) {
   respond.as(res).with(ok, status, message, null);
 }
 
-export default reservationApi;
+export default reviewApi;

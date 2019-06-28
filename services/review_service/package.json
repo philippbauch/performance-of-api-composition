@@ -1,0 +1,40 @@
+{
+  "name": "review_service",
+  "version": "1.0.0",
+  "description": "Review Service",
+  "author": "Philipp Bauch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/philippbauch/performance-of-api-composition"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:clean": "rm -rf dist && npm run build",
+    "build:watch": "tsc --watch",
+    "dev": "concurrently \"npm:build:watch\" \"nodemon\"",
+    "start": "node -r dotenv/config ./dist/index.js",
+    "sync:proto": "./sync_proto.sh",
+    "test": "node -r dotenv/config ./tests/index.js"
+  },
+  "dependencies": {
+    "@grpc/proto-loader": "^0.5.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.16.4",
+    "grpc": "^1.21.1",
+    "mongodb": "^3.2.4",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.5",
+    "@types/express": "^4.16.1",
+    "@types/mongodb": "^3.1.26",
+    "@types/node": "^12.0.0",
+    "@types/winston": "^2.4.4",
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.19.0",
+    "prettier": "^1.17.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
+  }
+}

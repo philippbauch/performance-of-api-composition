@@ -23,7 +23,7 @@ export const getReservations: handleUnaryCall<
   const _userId = userId ? ObjectId.createFromHexString(userId) : undefined;
   const _restaurantId = restaurantId ? ObjectId.createFromHexString(restaurantId) : undefined;
   try {
-    const reservations = await db.findReservations({ 
+    const reservations = await db.findReservations({
       userId: _userId,
       restaurantId: _restaurantId
     });

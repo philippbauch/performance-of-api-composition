@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from "apollo-server";
 import logger from "./logger";
-import { 
+import {
   reservationDateResolver,
   reservationIdResolver,
   reservationPaxResolver,
@@ -17,10 +17,19 @@ import {
   restaurantAddressResolver,
   restaurantIdResolver,
   restaurantNameResolver,
+  restaurantReservationsResolver,
   restaurantResolver,
   restaurantsResolver,
-  restaurantReservationsResolver
 } from "./restaurant/restaurant.resolver";
+import { 
+  reviewCommentResolver,
+  reviewIdResolver,
+  reviewRatingResolver,
+  reviewResolver,
+  reviewRestaurantResolver,
+  reviewsResolver,
+  reviewUserResolver,
+} from "./review/review.resolver";
 import {
   userEmailResolver,
   userFirstNameResolver,
@@ -103,7 +112,9 @@ const resolvers = {
     reservation: reservationResolver,
     reservations: reservationsResolver,
     restaurant: restaurantResolver,
-    restaurants: restaurantsResolver
+    restaurants: restaurantsResolver,
+    review: reviewResolver,
+    reviews: reviewsResolver
   },
   Address: {
     streetName: addressStreetNameResolver,
@@ -123,6 +134,13 @@ const resolvers = {
     name: restaurantNameResolver,
     address: restaurantAddressResolver,
     reservations: restaurantReservationsResolver
+  },
+  Review: {
+    id: reviewIdResolver,
+    rating: reviewRatingResolver,
+    comment: reviewCommentResolver,
+    user: reviewUserResolver,
+    restaurant: reviewRestaurantResolver
   },
   User: {
     id: userIdResolver,
