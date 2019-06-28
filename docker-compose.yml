@@ -133,6 +133,26 @@ services:
       USER_PORT: 8080
 
   # Frontend
+  frontend:
+    build: frontend
+    links:
+      - rest-gateway
+      # TODO: Add other gateways
+    restart: always
+    ports:
+      - 3000:80
+    environment:
+      REST_HOST: rest-gateway
+      REST_PORT: 8000
+      REST_CACHED_HOST: localhost
+      REST_CACHED_PORT: 8001
+      GRPC_HOST: localhost
+      GRPC_PORT: 8002
+      GRPC_CACHED_HOST: localhost
+      GRPC_CACHED_PORT: 8003
+
+  
+
 
 volumes:
   mongo-user-data:
