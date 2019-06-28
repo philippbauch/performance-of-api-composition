@@ -18,8 +18,7 @@ message Address {
 message Restaurant {
     required string name = 1;
     Address address = 2;
-    string lastName = 3;
-    optional string _id = 4;
+    optional string _id = 3;
 }
 
 message GetRestaurantsRequest {
