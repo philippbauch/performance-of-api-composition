@@ -4,6 +4,7 @@ import db from "../db";
 import { Review } from "../models/Review";
 
 interface GetReviewsRequest {
+  rating?: number;
   userId?: string;
   restaurantId?: string;
 }
@@ -19,12 +20,13 @@ export const getReviews: handleUnaryCall<
   call: ServerUnaryCall<GetReviewsRequest>,
   callback: sendUnaryData<GetReviewsResponse>
 ) => {
-  const { userId, restaurantId } = call.request;
+  const { userId, restaurantId, rating } = call.request;
   const _userId = userId && ObjectId.createFromHexString(userId);
   const _restaurantId =
     restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     const reviews = await db.findReviews({
+      rating,
       ...(_userId && { userId: _userId }),
       ...(_restaurantId && { restaurantId: _restaurantId })
     });

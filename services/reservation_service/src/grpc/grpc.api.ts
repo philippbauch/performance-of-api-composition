@@ -4,6 +4,7 @@ import db from "../db";
 import { Reservation } from "../models/Reservation";
 
 interface GetReservationsRequest {
+  pax?: string;
   userId?: string;
   restaurantId?: string;
 }
@@ -19,12 +20,13 @@ export const getReservations: handleUnaryCall<
   call: ServerUnaryCall<GetReservationsRequest>,
   callback: sendUnaryData<GetReservationsResponse>
 ) => {
-  const { userId, restaurantId } = call.request;
+  const { userId, restaurantId, pax } = call.request;
   const _userId = userId && ObjectId.createFromHexString(userId);
   const _restaurantId =
     restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     const reservations = await db.findReservations({
+      pax,
       ...(_userId && { userId: _userId }),
       ...(_restaurantId && { restaurantId: _restaurantId })
     });

@@ -1,9 +1,7 @@
-import { User } from '../models/User';
-import { getReservations } from '../reservation/reservation.api';
-import {
-  getUser,
-  getUsers,
-} from "./user.api";
+import { User } from "../models/User";
+import { getReservations } from "../reservation/reservation.api";
+import { getReviews } from "../review/review.api";
+import { getUser, getUsers } from "./user.api";
 
 export const usersResolver = (_: undefined, args: any) => {
   const { email, firstName, lastName } = args;
@@ -11,7 +9,7 @@ export const usersResolver = (_: undefined, args: any) => {
 };
 
 export const userResolver = (_: undefined, args: any) => {
-  const { id } = args;
+  const { id } = args;
   return id ? getUser(id) : null;
 };
 
@@ -28,4 +26,7 @@ export const userReservationsResolver = (user: User) => {
   return getReservations({ userId });
 };
 
-export const userReviewsResolver = (user: User) => [] /* TODO */;
+export const userReviewsResolver = (user: User) => {
+  const { _id: userId } = user;
+  return getReviews({ userId });
+};

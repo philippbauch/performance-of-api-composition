@@ -1,18 +1,15 @@
-import { Review } from '../models/Review';
-import { getRestaurant } from '../restaurant/restaurant.api';
-import { getUser } from '../user/user.api';
-import {
-  getReview,
-  getReviews,
-} from "./review.api";
+import { Review } from "../models/Review";
+import { getRestaurant } from "../restaurant/restaurant.api";
+import { getUser } from "../user/user.api";
+import { getReview, getReviews } from "./review.api";
 
 export const reviewsResolver = (_: undefined, args: any) => {
-  const { userId, restaurantId } = args;
-  return getReviews({ userId, restaurantId });
+  const { userId, restaurantId, rating } = args;
+  return getReviews({ userId, restaurantId, rating });
 };
 
 export const reviewResolver = (_: undefined, args: any) => {
-  const { id } = args;
+  const { id } = args;
   return id ? getReview(id) : null;
 };
 

@@ -13,12 +13,13 @@ reviewApi.delete("/reviews/:id", deleteReview);
 
 async function getReviews(req: express.Request, res: express.Response) {
   let reviews, message, ok, status;
-  const { userId, restaurantId } = req.query;
+  const { userId, restaurantId, rating } = req.query;
   const _userId = userId && ObjectId.createFromHexString(userId);
   const _restaurantId =
     restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     reviews = await db.findReviews({
+      rating,
       ...(_userId && { userId: _userId }),
       ...(_restaurantId && { restaurantId: _restaurantId })
     });

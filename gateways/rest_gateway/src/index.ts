@@ -7,7 +7,7 @@ import {
   reservationResolver,
   reservationRestaurantResolver,
   reservationsResolver,
-  reservationUserResolver,
+  reservationUserResolver
 } from "./reservation/reservation.resolver";
 import {
   addressCityResolver,
@@ -20,15 +20,16 @@ import {
   restaurantReservationsResolver,
   restaurantResolver,
   restaurantsResolver,
+  restaurantReviewsResolver
 } from "./restaurant/restaurant.resolver";
-import { 
+import {
   reviewCommentResolver,
   reviewIdResolver,
   reviewRatingResolver,
   reviewResolver,
   reviewRestaurantResolver,
   reviewsResolver,
-  reviewUserResolver,
+  reviewUserResolver
 } from "./review/review.resolver";
 import {
   userEmailResolver,
@@ -38,6 +39,7 @@ import {
   userReservationsResolver,
   userResolver,
   usersResolver,
+  userReviewsResolver
 } from "./user/user.resolver";
 
 const DEFAULT_PORT = "8000";
@@ -91,17 +93,17 @@ const typeDefs = gql`
   }
 
   type Query {
-    user(id: String): User
+    user(id: ID): User
     users(email: String, firstName: String, lastName: String): [User]
 
-    restaurant(id: String): Restaurant
+    restaurant(id: ID): Restaurant
     restaurants(name: String): [Restaurant]
 
-    reservation(id: String): Reservation
-    reservations: [Reservation]
+    reservation(id: ID): Reservation
+    reservations(pax: Int, userId: ID, restaurantId: ID): [Reservation]
 
-    review(id: String): Review
-    reviews: [Review]
+    review(id: ID): Review
+    reviews(rating: Int, userId: ID, restaurantId: ID): [Review]
   }
 `;
 
@@ -133,7 +135,8 @@ const resolvers = {
     id: restaurantIdResolver,
     name: restaurantNameResolver,
     address: restaurantAddressResolver,
-    reservations: restaurantReservationsResolver
+    reservations: restaurantReservationsResolver,
+    reviews: restaurantReviewsResolver
   },
   Review: {
     id: reviewIdResolver,
@@ -147,7 +150,8 @@ const resolvers = {
     email: userEmailResolver,
     firstName: userFirstNameResolver,
     lastName: userLastNameResolver,
-    reservations: userReservationsResolver
+    reservations: userReservationsResolver,
+    reviews: userReviewsResolver
   }
 };
 

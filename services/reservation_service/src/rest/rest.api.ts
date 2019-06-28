@@ -13,12 +13,13 @@ reservationApi.delete("/reservations/:id", deleteReservation);
 
 async function getReservations(req: express.Request, res: express.Response) {
   let reservations, message, ok, status;
-  const { userId, restaurantId } = req.query;
+  const { userId, restaurantId, pax } = req.query;
   const _userId = userId && ObjectId.createFromHexString(userId);
   const _restaurantId =
     restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     reservations = await db.findReservations({
+      pax,
       ...(_userId && { userId: _userId }),
       ...(_restaurantId && { restaurantId: _restaurantId })
     });

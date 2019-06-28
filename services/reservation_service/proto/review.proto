@@ -19,6 +19,7 @@ message Review {
 message GetReviewsRequest {
     optional string usedId = 1;
     optional string reviewId = 2;
+    optional int32 rating = 3;
 }
 
 message GetReviewsResponse {

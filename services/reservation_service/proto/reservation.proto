@@ -19,6 +19,7 @@ message Reservation {
 message GetReservationsRequest {
     optional string usedId = 1;
     optional string reservationId = 2;
+    optional int32 pax = 3;
 }
 
 message GetReservationsResponse {
