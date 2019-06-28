@@ -19,7 +19,7 @@ async function getReviews(req: express.Request, res: express.Response) {
     restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     reviews = await db.findReviews({
-      rating,
+      ...(rating && { rating }),
       ...(_userId && { userId: _userId }),
       ...(_restaurantId && { restaurantId: _restaurantId })
     });

@@ -26,7 +26,7 @@ export const getReviews: handleUnaryCall<
     restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     const reviews = await db.findReviews({
-      rating,
+      ...(rating && { rating }),
       ...(_userId && { userId: _userId }),
       ...(_restaurantId && { restaurantId: _restaurantId })
     });

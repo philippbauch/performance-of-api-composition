@@ -19,7 +19,7 @@ async function getReservations(req: express.Request, res: express.Response) {
     restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     reservations = await db.findReservations({
-      pax,
+      ...(pax && { pax }),
       ...(_userId && { userId: _userId }),
       ...(_restaurantId && { restaurantId: _restaurantId })
     });

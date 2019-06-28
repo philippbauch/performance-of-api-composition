@@ -26,7 +26,7 @@ export const getReservations: handleUnaryCall<
     restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     const reservations = await db.findReservations({
-      pax,
+      ...(pax && { pax }),
       ...(_userId && { userId: _userId }),
       ...(_restaurantId && { restaurantId: _restaurantId })
     });
