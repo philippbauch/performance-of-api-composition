@@ -20,12 +20,13 @@ export const getReviews: handleUnaryCall<
   callback: sendUnaryData<GetReviewsResponse>
 ) => {
   const { userId, restaurantId } = call.request;
-  const _userId = userId ? ObjectId.createFromHexString(userId) : undefined;
-  const _restaurantId = restaurantId ? ObjectId.createFromHexString(restaurantId) : undefined;
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     const reviews = await db.findReviews({
-      userId: _userId,
-      restaurantId: _restaurantId
+      ...(_userId && { userId: _userId }),
+      ...(_restaurantId && { restaurantId: _restaurantId })
     });
     callback(null, { reviews });
   } catch (error) {
@@ -41,7 +42,10 @@ interface GetReviewResponse {
   review: Review;
 }
 
-export const getReview: handleUnaryCall<GetReviewRequest, GetReviewResponse> = async (
+export const getReview: handleUnaryCall<
+  GetReviewRequest,
+  GetReviewResponse
+> = async (
   call: ServerUnaryCall<GetReviewRequest>,
   callback: sendUnaryData<GetReviewResponse>
 ) => {
@@ -81,13 +85,14 @@ export const insertReview: handleUnaryCall<
   const { review } = call.request;
   delete review._id;
   const { userId, restaurantId } = review;
-  const _userId = ObjectId.createFromHexString(userId);
-  const _restaurantId = ObjectId.createFromHexString(restaurantId);
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
     const { ops, result } = await db.insertReview({
       ...review,
-      userId: _userId,
-      restaurantId: _restaurantId
+      ...(_userId && { userId: _userId }),
+      ...(_restaurantId && { restaurantId: _restaurantId })
     });
     if (result.ok && ops.length === 1) {
       callback(null, { review: ops[0] });
@@ -116,8 +121,9 @@ export const updateReview: handleUnaryCall<
   const { _id: reviewId, review } = call.request;
   delete review._id;
   const { userId, restaurantId } = review;
-  const _userId = ObjectId.createFromHexString(userId);
-  const _restaurantId = ObjectId.createFromHexString(restaurantId);
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   if (reviewId.length !== 24 || !ObjectId.isValid(reviewId)) {
     callback(new Error(`Invalid ObjectId: ${reviewId}`), null);
   } else {
@@ -125,8 +131,8 @@ export const updateReview: handleUnaryCall<
     try {
       const { result } = await db.updateReview(_reviewId, {
         ...review,
-        userId: _userId,
-        restaurantId: _restaurantId
+        ...(_userId && { userId: _userId }),
+        ...(_restaurantId && { restaurantId: _restaurantId })
       });
       if (result.n && result.n > 0) {
         callback(null, null);

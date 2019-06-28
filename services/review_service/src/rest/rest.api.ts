@@ -13,13 +13,14 @@ reviewApi.delete("/reviews/:id", deleteReview);
 
 async function getReviews(req: express.Request, res: express.Response) {
   let reviews, message, ok, status;
+  const { userId, restaurantId } = req.query;
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
-    const { userId, restaurantId } = req.query;
-    const _userId = userId ? ObjectId.createFromHexString(userId) : undefined;
-    const _restaurantId = restaurantId ? ObjectId.createFromHexString(restaurantId) : undefined;
     reviews = await db.findReviews({
-      userId: _userId,
-      restaurantId: _restaurantId
+      ...(_userId && { userId: _userId }),
+      ...(_restaurantId && { restaurantId: _restaurantId })
     });
     ok = 1;
     status = reviews.length > 0 ? 200 : 204;
@@ -63,14 +64,15 @@ async function postReview(req: express.Request, res: express.Response) {
   const payload = req.body;
   delete payload._id;
   let inserted, message, ok, status;
+  const { userId, restaurantId } = payload;
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   try {
-    const { userId, restaurantId } = payload;
-    const _userId = ObjectId.createFromHexString(userId);
-    const _restaurantId = ObjectId.createFromHexString(restaurantId);
     const { ops, result } = await db.insertReview({
       ...payload,
-      userId: _userId,
-      restaurantId: _restaurantId
+      ...(_userId && { userId: _userId }),
+      ...(_restaurantId && { restaurantId: _restaurantId })
     });
     ok = result.ok;
     status = ok ? 201 : 500;
@@ -88,20 +90,21 @@ async function putReview(req: express.Request, res: express.Response) {
   delete payload._id;
   let message, ok, status;
   const { id: reviewId } = req.params;
+  const { userId, restaurantId } = req.query;
+  const _userId = userId && ObjectId.createFromHexString(userId);
+  const _restaurantId =
+    restaurantId && ObjectId.createFromHexString(restaurantId);
   if (reviewId.length !== 24 || !ObjectId.isValid(reviewId)) {
     message = `Invalid ObjectId: ${reviewId}`;
     ok = 0;
     status = 400;
   } else {
     const _reviewId = ObjectId.createFromHexString(reviewId);
-    const { userId, restaurantId } = payload;
-    const _userId = ObjectId.createFromHexString(userId);
-    const _restaurantId = ObjectId.createFromHexString(restaurantId);
     try {
       const { result } = await db.updateReview(_reviewId, {
         ...payload,
-        userId: _userId,
-        restaurantId: _restaurantId
+        ...(_userId && { userId: _userId }),
+        ...(_restaurantId && { restaurantId: _restaurantId })
       });
       if (result.n && result.n > 0) {
         ok = result.ok!;
