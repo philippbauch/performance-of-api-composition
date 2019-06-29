@@ -1,22 +1,5 @@
-// Colors
 $white: #fff;
-$primary-color: #1890ff;
-$primary-color-dark: #273c4d;
-$primary-color-darker: darken($primary-color-dark, 5%);
-
-$status-color-error: rgb(190, 48, 48);
-$status-color-success: rgb(22, 179, 7);
-$status-color-warning: rgb(255, 189, 6);
-
-$box-shadow: 0 0 0 1px rgba(50, 75, 95, 0.05), 0 2px 4px 0 rgba(50, 75, 95, 0.1),
-  0 1px 1px 0 rgba(0, 0, 0, 0.07);
-$box-shadow-hover: 0 0 0 1px rgba(50, 75, 95, 0.05),
-  0 3px 4px 0 rgba(50, 75, 95, 0.15), 0 1px 1px 0 rgba(0, 0, 0, 0.07);
-
-$status-bar-height: 4px;
-
-$background-color: #f0f2f5;
-$background-color-darker: #f7fafc;
+$sider-width: 360px;
 
 $radius: 4px;
 $border: 1px solid rgba(0, 0, 0, 0.1);
@@ -36,20 +19,20 @@ $padding-md: 16px;
 $padding-lg: 24px;
 $padding-xl: 32px;
 
-// Screen Breakpoints
-$screen-sm: 769px;
-$screen-md: 1024px;
-$screen-lg: 1216px;
-$screen-xl: 1408px;
+$background-color: #f0f2f5;
+$background-color-darker: #f7fafc;
 
-// Layout
-$page-header-height: 64px;
+$box-shadow: 0 0 0 1px rgba(50, 75, 95, 0.05), 0 2px 4px 0 rgba(50, 75, 95, 0.1),
+  0 1px 1px 0 rgba(0, 0, 0, 0.07);
+$box-shadow-hover: 0 0 0 1px rgba(50, 75, 95, 0.05),
+  0 3px 4px 0 rgba(50, 75, 95, 0.15), 0 1px 1px 0 rgba(0, 0, 0, 0.07);
 
-$sider-width-default: 260px;
-$sider-color: #6d7a87;
-$sider-color-light: #d6e2ec;
-$sider-title-height: 64px;
+$primary-color: #1890ff;
+$primary-color-dark: #273c4d;
+$primary-color-darker: darken($primary-color-dark, 5%);
 
-// ----------------------------------------------------------------------------
+$status-color-error: rgb(190, 48, 48);
+$status-color-success: rgb(22, 179, 7);
+$status-color-warning: rgb(255, 189, 6);
 
-$sider-width: 360px;
+$status-bar-height: 4px;

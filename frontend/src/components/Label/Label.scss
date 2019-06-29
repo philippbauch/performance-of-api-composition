@@ -1,0 +1,18 @@
+@import "../../styles/variables";
+
+.sprova-label {
+  margin-bottom: $margin-sm;
+
+  &-text {
+    color: rgb(71, 87, 95);
+    display: block;
+    font-weight: 500;
+
+    &.is-required {
+      &::before {
+        content: "*";
+        margin-right: $margin-xs;
+      }
+    }
+  }
+}

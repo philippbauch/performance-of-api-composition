@@ -1,0 +1,43 @@
+@import "../../styles/variables";
+
+.sprova-table {
+  width: 100%;
+
+  &-row td,
+  &-row th {
+    padding: $padding-sm $padding-md;
+  }
+
+  &-extras {
+    padding: $padding-md;
+    border-bottom: $border;
+  }
+
+  &-head {
+    border-bottom: $border;
+  }
+
+  &-body {
+    .sprova-table-row {
+      &.is-clickable {
+        &:hover {
+          background-color: #e6f7ff;
+          cursor: pointer;
+        }
+      }
+      &:nth-of-type(2n-1) {
+        background-color: #f7fafc;
+      }
+    }
+  }
+
+  &-empty {
+    display: flex;
+    justify-content: center;
+    padding: 1.25rem;
+
+    &-item {
+      opacity: 0.5;
+    }
+  }
+}

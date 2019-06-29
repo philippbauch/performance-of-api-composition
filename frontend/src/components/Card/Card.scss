@@ -1,0 +1,70 @@
+@import "../../styles/variables";
+
+.card {
+  background-color: $white;
+  border-radius: $radius;
+  box-shadow: $box-shadow;
+  display: block;
+  overflow: hidden;
+  transition: all 0.1s;
+
+  &.is-clickable {
+    &:hover {
+      cursor: pointer;
+      transform: translateY(-1px);
+      box-shadow: $box-shadow-hover;
+    }
+  }
+
+  &-body,
+  &-footer {
+    &.is-padded {
+      padding: $padding-md;
+    }
+
+    &.is-darker {
+      background-color: $background-color-darker;
+    }
+  }
+
+  &-body {
+    height: 100%;
+  }
+
+  &-footer {
+    border-top: $border;
+  }
+
+  &-header {
+    border-bottom: $border;
+    padding: $padding-md;
+  }
+
+  &-status-bar {
+    height: $status-bar-height;
+  }
+
+  &.is-error {
+    .card-status-bar {
+      background-color: $status-color-error;
+    }
+  }
+
+  &.is-info {
+    .card-status-bar {
+      background-color: $primary-color;
+    }
+  }
+
+  &.is-success {
+    .card-status-bar {
+      background-color: $status-color-success;
+    }
+  }
+
+  &.is-warning {
+    .card-status-bar {
+      background-color: $status-color-warning;
+    }
+  }
+}
