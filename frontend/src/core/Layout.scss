@@ -1,8 +1,10 @@
 @import "../styles/variables";
 
 .layout {
+  padding: $padding-md;
   height: 100vh;
   display: grid;
+  grid-gap: $margin-md;
   grid-template-columns: $sider-width 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: "sider main";
