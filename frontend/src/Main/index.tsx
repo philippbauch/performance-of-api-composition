@@ -1,14 +1,32 @@
-import { Button, Divider } from "antd";
+import { Button } from "antd";
 import Chart from "chart.js";
+import _ from "lodash";
 import React, { useEffect } from "react";
 import Card, { CardBody, CardHeader } from "../components/Card";
-import Level from "../components/Level";
-import Table, { TableColumn, TableRow } from "../components/Table";
+import { Request } from "../models/Request";
 import "./index.scss";
 
-const Main: React.FunctionComponent = () => {
+interface Props {
+  isRunning: boolean;
+  requests: Request[];
+  onReset: () => void;
+}
+
+const Main: React.FunctionComponent<Props> = ({
+  isRunning,
+  requests,
+  onReset
+}) => {
   const pieChartCanvas = React.createRef<HTMLCanvasElement>();
   const lineChartCanvas = React.createRef<HTMLCanvasElement>();
+
+  const countSuccessful = (_requests: Request[]) => {
+    return _requests.filter((request: Request) => request.ok).length;
+  };
+
+  const countFailed = (_requests: Request[]) => {
+    return _requests.filter((request: Request) => !request.ok).length;
+  };
 
   useEffect(() => {
     const pieChart = new Chart(pieChartCanvas.current!, {
@@ -17,7 +35,7 @@ const Main: React.FunctionComponent = () => {
         labels: ["Success", "Failure"],
         datasets: [
           {
-            data: [5, 1],
+            data: [countSuccessful(requests), countFailed(requests)],
             backgroundColor: ["#52c41a", "#f5222d"],
             borderWidth: 1
           }
@@ -33,32 +51,38 @@ const Main: React.FunctionComponent = () => {
         }
       }
     });
-  }, []);
+  }, [requests]);
 
   useEffect(() => {
     const lineChart = new Chart(lineChartCanvas.current!, {
       type: "line",
       data: {
-        labels: ["Success", "Failure"],
         datasets: [
           {
-            data: [5, 1],
-            backgroundColor: ["#52c41a", "#f5222d"],
-            borderWidth: 1
+            label: "Response Time (ms)",
+            backgroundColor: "#1890ff55",
+            borderColor: "#1890ff",
+            data: requests.map((request: Request, index: number) => ({
+              x: index + 1,
+              y: request.time / 1000000
+            }))
           }
         ]
       },
       options: {
+        scales: {
+          xAxes: [
+            {
+              type: "linear"
+            }
+          ]
+        },
         legend: {
-          position: "bottom",
-          labels: {
-            boxWidth: 16,
-            padding: 16
-          }
+          position: "bottom"
         }
       }
     });
-  }, []);
+  }, [requests]);
 
   return (
     <div className="main">
@@ -85,7 +109,15 @@ const Main: React.FunctionComponent = () => {
             <h4>Average Response Time</h4>
           </CardHeader>
           <CardBody>
-            <h1>442ms</h1>
+            <h1>
+              {requests && requests.length > 0
+                ? `${Math.round(
+                    _.sum(requests.map((request: Request) => request.time)) /
+                      requests.length /
+                      1000000
+                  )}ms`
+                : "-"}
+            </h1>
           </CardBody>
         </Card>
         <Card style={{ gridArea: "fast" }}>
@@ -93,7 +125,14 @@ const Main: React.FunctionComponent = () => {
             <h4>Fastest Response</h4>
           </CardHeader>
           <CardBody>
-            <h1>256ms</h1>
+            <h1>
+              {requests && requests.length > 0
+                ? `${Math.round(
+                    _.min(requests.map((request: Request) => request.time))! /
+                      1000000
+                  )}ms`
+                : "-"}
+            </h1>
           </CardBody>
         </Card>
         <Card style={{ gridArea: "slow" }}>
@@ -101,44 +140,20 @@ const Main: React.FunctionComponent = () => {
             <h4>Slowest Response</h4>
           </CardHeader>
           <CardBody>
-            <h1>742ms</h1>
+            <h1>
+              {requests && requests.length > 0
+                ? `${Math.round(
+                    _.max(requests.map((request: Request) => request.time))! /
+                      1000000
+                  )}ms`
+                : "-"}
+            </h1>
           </CardBody>
         </Card>
       </section>
-      <Button type="primary" style={{ marginRight: 16 }}>
-        Rank
+      <Button type="primary" disabled={isRunning} onClick={onReset}>
+        Clear
       </Button>
-      <Button>Clear</Button>
-
-      <Divider />
-
-      <Card style={{ marginBottom: 24 }}>
-        <CardHeader>
-          <Level>
-            <h4>Test Cases</h4>
-            <a>Clear</a>
-          </Level>
-        </CardHeader>
-        <CardBody>
-          <Table
-            data={[]}
-            columnTitles={[
-              "Title",
-              "Protocol",
-              "Caching",
-              "Avg. Response Time"
-            ]}
-            renderRow={(item: any, index: number) => (
-              <TableRow key={index} onClick={() => {}}>
-                <TableColumn>Query</TableColumn>
-                <TableColumn>REST</TableColumn>
-                <TableColumn>Yes</TableColumn>
-                <TableColumn>254ms</TableColumn>
-              </TableRow>
-            )}
-          />
-        </CardBody>
-      </Card>
     </div>
   );
 };
