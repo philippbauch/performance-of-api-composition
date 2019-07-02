@@ -3,11 +3,8 @@ import * as grpc from "grpc";
 import path from "path";
 import logger from "../logger";
 import {
-  deleteUser,
   getUser,
   getUsers,
-  insertUser,
-  updateUser
 } from "./grpc.api";
 
 const { PROTO_PATH } = process.env;
@@ -32,9 +29,6 @@ const server = new grpc.Server();
 server.addService(userPackage.UserService.service, {
   getUsers,
   getUser,
-  insertUser,
-  updateUser,
-  deleteUser
 });
 
 export default server;

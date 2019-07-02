@@ -1,7 +1,7 @@
 import { GraphQLClient } from "graphql-request";
 
 const DEFAULT_REST_CACHED_HOST = "localhost";
-const DEFAULT_REST_CACHED_PORT = "8001";
+const DEFAULT_REST_CACHED_PORT = "8002";
 
 let { REST_CACHED_HOST, REST_CACHED_PORT } = process.env;
 

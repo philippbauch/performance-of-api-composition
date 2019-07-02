@@ -127,6 +127,7 @@ const Sider: React.FunctionComponent<Props> = ({
           time: extensions.tracing.duration
         });
       } catch (error) {
+        console.error(error);
         requests.push({
           ok: false,
           time: 0

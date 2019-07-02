@@ -3,11 +3,8 @@ import * as grpc from "grpc";
 import path from "path";
 import logger from "../logger";
 import {
-  deleteReview,
   getReview,
   getReviews,
-  insertReview,
-  updateReview
 } from "./grpc.api";
 
 const { PROTO_PATH } = process.env;
@@ -32,9 +29,6 @@ const server = new grpc.Server();
 server.addService(reviewPackage.ReviewService.service, {
   getReviews,
   getReview,
-  insertReview,
-  updateReview,
-  deleteReview
 });
 
 export default server;

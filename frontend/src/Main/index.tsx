@@ -51,6 +51,9 @@ const Main: React.FunctionComponent<Props> = ({
         }
       }
     });
+    return () => {
+      pieChart.destroy();
+    };
   }, [requests]);
 
   useEffect(() => {
@@ -82,6 +85,9 @@ const Main: React.FunctionComponent<Props> = ({
         }
       }
     });
+    return () => {
+      lineChart.destroy();
+    };
   }, [requests]);
 
   return (

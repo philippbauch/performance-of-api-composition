@@ -6,4 +6,6 @@ import App from "./core/App";
 
 dotenv.config();
 
+console.log(process.env);
+
 ReactDOM.render(<App />, document.getElementById("root"));

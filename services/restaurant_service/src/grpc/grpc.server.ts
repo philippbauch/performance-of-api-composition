@@ -3,11 +3,8 @@ import * as grpc from "grpc";
 import path from "path";
 import logger from "../logger";
 import {
-  deleteRestaurant,
   getRestaurant,
   getRestaurants,
-  insertRestaurant,
-  updateRestaurant
 } from "./grpc.api";
 
 const { PROTO_PATH } = process.env;
@@ -32,9 +29,6 @@ const server = new grpc.Server();
 server.addService(restaurantPackage.RestaurantService.service, {
   getRestaurants,
   getRestaurant,
-  insertRestaurant,
-  updateRestaurant,
-  deleteRestaurant
 });
 
 export default server;

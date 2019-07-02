@@ -3,30 +3,27 @@ syntax = "proto3";
 service RestaurantService {
     rpc GetRestaurants (GetRestaurantsRequest) returns (GetRestaurantsResponse) {}
     rpc GetRestaurant (GetRestaurantRequest) returns (GetRestaurantResponse) {}
-    rpc InsertRestaurant (InsertRestaurantRequest) returns (InsertRestaurantResponse) {}
-    rpc UpdateRestaurant (UpdateRestaurantRequest) returns (UpdateRestaurantResponse) {}
-    rpc DeleteRestaurant (DeleteRestaurantRequest) returns (DeleteRestaurantResponse) {}
 }
 
 message Address {
-    string streetName = 1;
-    int32 houseNumber = 2;
-    string city = 3;
-    string zipCode = 4;
+    required string streetName = 1;
+    required int32 houseNumber = 2;
+    required string city = 3;
+    required string zipCode = 4;
 }
 
 message Restaurant {
     required string name = 1;
-    Address address = 2;
-    optional string _id = 3;
+    required Address address = 2;
+    string _id = 3;
 }
 
 message GetRestaurantsRequest {
-    optional string name = 1;
+    string name = 1;
 }
 
 message GetRestaurantsResponse {
-    repeated Restaurant restaurants = 1;
+    required repeated Restaurant restaurants = 1;
 }
 
 message GetRestaurantRequest {
@@ -34,26 +31,5 @@ message GetRestaurantRequest {
 }
 
 message GetRestaurantResponse {
-    Restaurant restaurant = 1;
-}
-
-message InsertRestaurantRequest {
     required Restaurant restaurant = 1;
 }
-
-message InsertRestaurantResponse {
-    Restaurant restaurant = 1;
-}
-
-message UpdateRestaurantRequest {
-    required string _id = 1;
-    required Restaurant restaurant = 2;
-}
-
-message UpdateRestaurantResponse {}
-
-message DeleteRestaurantRequest {
-    required string _id = 1;
-}
-
-message DeleteRestaurantResponse {}

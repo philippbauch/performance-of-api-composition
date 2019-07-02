@@ -132,11 +132,34 @@ services:
       USER_HOST: user-service
       USER_PORT: 8080
 
+  grpc-gateway:
+    build: gateways/grpc_gateway
+    links:
+      - user-service
+      - restaurant-service
+      - reservation-service
+      - review-service
+    restart: always
+    ports:
+      - 8001:8001
+    environment:
+      PORT: 8001
+      RESERVATION_HOST: reservation-service
+      RESERVATION_PORT: 4042
+      RESTAURANT_HOST: restaurant-service
+      RESTAURANT_PORT: 4041
+      REVIEW_HOST: review-service
+      REVIEW_PORT: 4043
+      USER_HOST: user-service
+      USER_PORT: 4040
+      PROTO_PATH: /usr/src/app/proto
+
   # Frontend
   frontend:
     build: frontend
     links:
       - rest-gateway
+      - grpc-gateway
       # TODO: Add other gateways
     restart: always
     ports:
@@ -145,9 +168,9 @@ services:
       REST_HOST: rest-gateway
       REST_PORT: 8000
       REST_CACHED_HOST: localhost
-      REST_CACHED_PORT: 8001
-      GRPC_HOST: localhost
-      GRPC_PORT: 8002
+      REST_CACHED_PORT: 8002
+      GRPC_HOST: grpc-gateway
+      GRPC_PORT: 8001
       GRPC_CACHED_HOST: localhost
       GRPC_CACHED_PORT: 8003
 

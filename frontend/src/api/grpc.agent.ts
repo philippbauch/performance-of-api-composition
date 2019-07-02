@@ -1,7 +1,7 @@
 import { GraphQLClient } from "graphql-request";
 
 const DEFAULT_GRPC_HOST = "localhost";
-const DEFAULT_GRPC_PORT = "8002";
+const DEFAULT_GRPC_PORT = "8001";
 
 let { GRPC_HOST, GRPC_PORT } = process.env;
 
