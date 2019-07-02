@@ -9,20 +9,20 @@ import ProgressBar from "progress";
 import { Restaurant } from "./models/Restaurant";
 import { User } from "./models/User";
 import {
+  deleteReservation,
+  getReservations,
+  postReservation,
+} from "./reservation/reservation.api";
+import {
   deleteRestaurant,
   getRestaurants,
   postRestaurant
 } from "./restaurant/restaurant.api";
+import { deleteReview, getReviews, postReview } from "./review/review.api";
 import { deleteUser, getUsers, postUser } from "./user/user.api";
-import {
-  postReservation,
-  getReservations,
-  deleteReservation
-} from "./reservation/reservation.api";
-import { getReviews, deleteReview, postReview } from "./review/review.api";
 
 const PROBABILITY_RESERVATION = 5;
-const PROBABILITY_REVIEW = 2;
+const PROBABILITY_REVIEW = 5;
 
 (async () => {
   const { usersAmount, restaurantsAmount } = await inquirer.prompt([
@@ -380,7 +380,7 @@ const PROBABILITY_REVIEW = 2;
     );
     for (const user of users) {
       for (const restaurant of restaurants) {
-        if (chance.bool({ likelihood: PROBABILITY_RESERVATION })) {
+        if (chance.bool({ likelihood: PROBABILITY_REVIEW })) {
           const review = {
             comment: faker.lorem.sentence(),
             rating: Math.floor(Math.random() * 5) + 1,

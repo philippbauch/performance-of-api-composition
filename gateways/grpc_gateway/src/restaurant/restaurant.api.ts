@@ -17,7 +17,6 @@ export async function getRestaurants(params: QueryParams): Promise<Restaurant[]>
     });
 }
 
-
 export function getRestaurant(_id: string): Promise<Restaurant> {
   const getRestaurantPromisified = util.promisify(client.getRestaurant);
   return getRestaurantPromisified.call(client, { _id })

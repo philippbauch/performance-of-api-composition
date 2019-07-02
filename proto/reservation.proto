@@ -7,7 +7,7 @@ service ReservationService {
 
 message Reservation {
     required string userId = 1;
-    required string reservationId = 2;
+    required string restaurantId = 2;
     required string date = 3;
     required int32 pax = 4;
     string _id = 5;
@@ -15,7 +15,7 @@ message Reservation {
 
 message GetReservationsRequest {
     string usedId = 1;
-    string reservationId = 2;
+    string restaurantId = 2;
     int32 pax = 3;
 }
 

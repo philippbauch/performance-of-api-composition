@@ -3,23 +3,20 @@ syntax = "proto3";
 service ReviewService {
     rpc GetReviews (GetReviewsRequest) returns (GetReviewsResponse) {}
     rpc GetReview (GetReviewRequest) returns (GetReviewResponse) {}
-    rpc InsertReview (InsertReviewRequest) returns (InsertReviewResponse) {}
-    rpc UpdateReview (UpdateReviewRequest) returns (UpdateReviewResponse) {}
-    rpc DeleteReview (DeleteReviewRequest) returns (DeleteReviewResponse) {}
 }
 
 message Review {
-    int32 rating = 1;
-    string comment = 2;
-    string userId = 3;
-    string restaurantId = 4;
-    optional string _id = 5;
+    required int32 rating = 1;
+    required string comment = 2;
+    required string userId = 3;
+    required string restaurantId = 4;
+    string _id = 5;
 }
 
 message GetReviewsRequest {
-    optional string usedId = 1;
-    optional string reviewId = 2;
-    optional int32 rating = 3;
+    string usedId = 1;
+    string restaurantId = 2;
+    int32 rating = 3;
 }
 
 message GetReviewsResponse {
@@ -31,26 +28,5 @@ message GetReviewRequest {
 }
 
 message GetReviewResponse {
-    Review review = 1;
-}
-
-message InsertReviewRequest {
     required Review review = 1;
 }
-
-message InsertReviewResponse {
-    Review review = 1;
-}
-
-message UpdateReviewRequest {
-    required string _id = 1;
-    required Review review = 2;
-}
-
-message UpdateReviewResponse {}
-
-message DeleteReviewRequest {
-    required string _id = 1;
-}
-
-message DeleteReviewResponse {}

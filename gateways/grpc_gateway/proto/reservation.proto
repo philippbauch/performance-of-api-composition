@@ -3,23 +3,20 @@ syntax = "proto3";
 service ReservationService {
     rpc GetReservations (GetReservationsRequest) returns (GetReservationsResponse) {}
     rpc GetReservation (GetReservationRequest) returns (GetReservationResponse) {}
-    rpc InsertReservation (InsertReservationRequest) returns (InsertReservationResponse) {}
-    rpc UpdateReservation (UpdateReservationRequest) returns (UpdateReservationResponse) {}
-    rpc DeleteReservation (DeleteReservationRequest) returns (DeleteReservationResponse) {}
 }
 
 message Reservation {
-    string userId = 1;
-    string reservationId = 2;
-    string date = 3;
-    int32 pax = 4;
-    optional string _id = 5;
+    required string userId = 1;
+    required string restaurantId = 2;
+    required string date = 3;
+    required int32 pax = 4;
+    string _id = 5;
 }
 
 message GetReservationsRequest {
-    optional string usedId = 1;
-    optional string reservationId = 2;
-    optional int32 pax = 3;
+    string usedId = 1;
+    string restaurantId = 2;
+    int32 pax = 3;
 }
 
 message GetReservationsResponse {
@@ -31,26 +28,5 @@ message GetReservationRequest {
 }
 
 message GetReservationResponse {
-    Reservation reservation = 1;
-}
-
-message InsertReservationRequest {
     required Reservation reservation = 1;
 }
-
-message InsertReservationResponse {
-    Reservation reservation = 1;
-}
-
-message UpdateReservationRequest {
-    required string _id = 1;
-    required Reservation reservation = 2;
-}
-
-message UpdateReservationResponse {}
-
-message DeleteReservationRequest {
-    required string _id = 1;
-}
-
-message DeleteReservationResponse {}
