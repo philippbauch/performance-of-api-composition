@@ -15,10 +15,6 @@ export const reviewResolver = (_: undefined, args: any) => {
 
 export const reviewIdResolver = (review: Review) => review._id;
 
-export const reviewRatingResolver = (review: Review) => review.rating;
-
-export const reviewCommentResolver = (review: Review) => review.comment;
-
 export const reviewUserResolver = (review: Review) => {
   const { userId } = review;
   return getUser(userId);

@@ -29,7 +29,7 @@ import {
   usersResolver,
 } from "./user/user.resolver";
 
-const DEFAULT_PORT = "8001";
+const DEFAULT_PORT = "8003";
 
 let { PORT } = process.env;
 
@@ -127,7 +127,7 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers, tracing: true });
+const server = new ApolloServer({ typeDefs, resolvers, tracing: true, cacheControl: { defaultMaxAge: 60 } });
 
 server.listen(PORT).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);

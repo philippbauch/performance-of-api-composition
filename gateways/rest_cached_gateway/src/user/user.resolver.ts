@@ -15,12 +15,6 @@ export const userResolver = (_: undefined, args: any) => {
 
 export const userIdResolver = (user: User) => user._id;
 
-export const userEmailResolver = (user: User) => user.email;
-
-export const userFirstNameResolver = (user: User) => user.firstName;
-
-export const userLastNameResolver = (user: User) => user.lastName;
-
 export const userReservationsResolver = (user: User) => {
   const { _id: userId } = user;
   return getReservations({ userId });

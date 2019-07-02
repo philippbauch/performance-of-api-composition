@@ -1,41 +1,28 @@
 import { ApolloServer, gql } from "apollo-server";
 import logger from "./logger";
 import {
-  reservationDateResolver,
   reservationIdResolver,
-  reservationPaxResolver,
   reservationResolver,
   reservationRestaurantResolver,
   reservationsResolver,
   reservationUserResolver
 } from "./reservation/reservation.resolver";
 import {
-  addressCityResolver,
-  addressHouseNumberResolver,
-  addressStreetNameResolver,
-  addressZipCodeResolver,
-  restaurantAddressResolver,
   restaurantIdResolver,
-  restaurantNameResolver,
   restaurantReservationsResolver,
   restaurantResolver,
   restaurantReviewsResolver,
   restaurantsResolver
 } from "./restaurant/restaurant.resolver";
 import {
-  reviewCommentResolver,
   reviewIdResolver,
-  reviewRatingResolver,
   reviewResolver,
   reviewRestaurantResolver,
   reviewsResolver,
   reviewUserResolver
 } from "./review/review.resolver";
 import {
-  userEmailResolver,
-  userFirstNameResolver,
   userIdResolver,
-  userLastNameResolver,
   userReservationsResolver,
   userResolver,
   userReviewsResolver,
@@ -118,44 +105,29 @@ const resolvers = {
     review: reviewResolver,
     reviews: reviewsResolver
   },
-  Address: {
-    streetName: addressStreetNameResolver,
-    houseNumber: addressHouseNumberResolver,
-    city: addressCityResolver,
-    zipCode: addressZipCodeResolver
-  },
   Reservation: {
     id: reservationIdResolver,
-    pax: reservationPaxResolver,
-    date: reservationDateResolver,
     user: reservationUserResolver,
     restaurant: reservationRestaurantResolver
   },
   Restaurant: {
     id: restaurantIdResolver,
-    name: restaurantNameResolver,
-    address: restaurantAddressResolver,
     reservations: restaurantReservationsResolver,
     reviews: restaurantReviewsResolver
   },
   Review: {
     id: reviewIdResolver,
-    rating: reviewRatingResolver,
-    comment: reviewCommentResolver,
     user: reviewUserResolver,
     restaurant: reviewRestaurantResolver
   },
   User: {
     id: userIdResolver,
-    email: userEmailResolver,
-    firstName: userFirstNameResolver,
-    lastName: userLastNameResolver,
     reservations: userReservationsResolver,
     reviews: userReviewsResolver
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers, tracing: true, cacheControl: { defaultMaxAge: 30 }});
+const server = new ApolloServer({ typeDefs, resolvers, tracing: true });
 
 server.listen(PORT).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);

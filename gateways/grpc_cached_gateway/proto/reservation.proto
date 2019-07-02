@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+service ReservationService {
+    rpc GetReservations (GetReservationsRequest) returns (GetReservationsResponse) {}
+    rpc GetReservation (GetReservationRequest) returns (GetReservationResponse) {}
+}
+
+message Reservation {
+    required string userId = 1;
+    required string restaurantId = 2;
+    required string date = 3;
+    required int32 pax = 4;
+    string _id = 5;
+}
+
+message GetReservationsRequest {
+    string usedId = 1;
+    string restaurantId = 2;
+    int32 pax = 3;
+}
+
+message GetReservationsResponse {
+    repeated Reservation reservations = 1;
+}
+
+message GetReservationRequest {
+    required string _id = 1;
+}
+
+message GetReservationResponse {
+    required Reservation reservation = 1;
+}

@@ -16,12 +16,6 @@ export const reservationResolver = (_: undefined, args: any) => {
 export const reservationIdResolver = (reservation: Reservation) =>
   reservation._id;
 
-export const reservationPaxResolver = (reservation: Reservation) =>
-  reservation.pax;
-
-export const reservationDateResolver = (reservation: Reservation) =>
-  reservation.date;
-
 export const reservationUserResolver = (reservation: Reservation) => {
   const { userId } = reservation;
   return userId ? getUser(userId) : null;

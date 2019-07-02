@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+service UserService {
+    rpc GetUsers (GetUsersRequest) returns (GetUsersResponse) {}
+    rpc GetUser (GetUserRequest) returns (GetUserResponse) {}
+}
+
+message User {
+    required string email = 1;
+    required string firstName = 2;
+    required string lastName = 3;
+    string _id = 4;
+}
+
+message GetUsersRequest {
+    string email = 1;
+    string firstName = 2;
+    string lastName = 3;
+}
+
+message GetUsersResponse {
+    repeated User users = 1;
+}
+
+message GetUserRequest {
+    required string _id = 1;
+}
+
+message GetUserResponse {
+    required User user = 1;
+}
