@@ -20,7 +20,7 @@ import {
   restaurantReservationsResolver,
   restaurantResolver,
   restaurantReviewsResolver,
-  restaurantsResolver
+  restaurantsResolver,
 } from "./restaurant/restaurant.resolver";
 import {
   reviewCommentResolver,
@@ -155,7 +155,7 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers, tracing: true, cacheControl: { defaultMaxAge: 30 }});
+const server = new ApolloServer({ typeDefs, resolvers, tracing: true });
 
 server.listen(PORT).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
