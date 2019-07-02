@@ -1,16 +1,8 @@
 import { GraphQLClient } from "graphql-request";
 
-const DEFAULT_REACT_APP_GRPC_CACHED_HOST = "localhost";
 const DEFAULT_REACT_APP_GRPC_CACHED_PORT = "8003";
 
-let { REACT_APP_GRPC_CACHED_HOST, REACT_APP_GRPC_CACHED_PORT } = process.env;
-
-if (!REACT_APP_GRPC_CACHED_HOST) {
-  console.log(
-    `No REACT_APP_GRPC_CACHED_HOST specified - fall back to default ${DEFAULT_REACT_APP_GRPC_CACHED_HOST}`
-  );
-  REACT_APP_GRPC_CACHED_HOST = DEFAULT_REACT_APP_GRPC_CACHED_HOST;
-}
+let { REACT_APP_GRPC_CACHED_PORT } = process.env;
 
 if (!REACT_APP_GRPC_CACHED_PORT) {
   console.log(
@@ -20,11 +12,11 @@ if (!REACT_APP_GRPC_CACHED_PORT) {
 }
 
 console.log(
-  `GRPC_CACHED Gateway at: http://${REACT_APP_GRPC_CACHED_HOST}:${REACT_APP_GRPC_CACHED_PORT}`
+  `GRPC_CACHED Gateway at: http://localhost:${REACT_APP_GRPC_CACHED_PORT}`
 );
 
 const client = new GraphQLClient(
-  `http://${REACT_APP_GRPC_CACHED_HOST}:${REACT_APP_GRPC_CACHED_PORT}`
+  `http://localhost:${REACT_APP_GRPC_CACHED_PORT}`
 );
 
 export default client;

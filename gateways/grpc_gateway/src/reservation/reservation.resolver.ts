@@ -23,13 +23,11 @@ export const reservationDateResolver = (reservation: Reservation) =>
   reservation.date;
 
 export const reservationUserResolver = (reservation: Reservation) => {
-  console.log(reservation);
   const { userId } = reservation;
   return userId ? getUser(userId) : null;
 };
 
 export const reservationRestaurantResolver = (reservation: Reservation) => {
-  console.log(reservation);
   const { restaurantId } = reservation;
   return restaurantId ? getRestaurant(restaurantId) : null;
 };

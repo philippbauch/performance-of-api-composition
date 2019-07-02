@@ -113,7 +113,7 @@ services:
 
   rest-gateway:
     build: gateways/rest_gateway
-    links:
+    depends_on: 
       - user-service
       - restaurant-service
       - reservation-service
@@ -134,7 +134,7 @@ services:
 
   grpc-gateway:
     build: gateways/grpc_gateway
-    links:
+    depends_on: 
       - user-service
       - restaurant-service
       - reservation-service
@@ -155,24 +155,16 @@ services:
       PROTO_PATH: /usr/src/app/proto
 
   # Frontend
+  
   frontend:
     build: frontend
-    links:
+    depends_on:
       - rest-gateway
       - grpc-gateway
       # TODO: Add other gateways
     restart: always
     ports:
       - 3000:80
-    environment:
-      REACT_APP_REST_HOST: rest-gateway
-      REACT_APP_REST_PORT: 8000
-      REACT_APP_REST_CACHED_HOST: localhost
-      REACT_APP_REST_CACHED_PORT: 8002
-      REACT_APP_GRPC_HOST: grpc-gateway
-      REACT_APP_GRPC_PORT: 8001
-      REACT_APP_GRPC_CACHED_HOST: localhost
-      REACT_APP_GRPC_CACHED_PORT: 8003
 
 volumes:
   mongo-user-data:
