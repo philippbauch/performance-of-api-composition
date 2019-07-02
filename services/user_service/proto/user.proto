@@ -19,7 +19,7 @@ message GetUsersRequest {
 }
 
 message GetUsersResponse {
-    required repeated User users = 1;
+    repeated User users = 1;
 }
 
 message GetUserRequest {

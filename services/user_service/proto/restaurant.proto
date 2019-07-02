@@ -23,7 +23,7 @@ message GetRestaurantsRequest {
 }
 
 message GetRestaurantsResponse {
-    required repeated Restaurant restaurants = 1;
+    repeated Restaurant restaurants = 1;
 }
 
 message GetRestaurantRequest {

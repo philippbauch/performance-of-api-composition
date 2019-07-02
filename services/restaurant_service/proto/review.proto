@@ -20,7 +20,7 @@ message GetReviewsRequest {
 }
 
 message GetReviewsResponse {
-    required repeated Review reviews = 1;
+    repeated Review reviews = 1;
 }
 
 message GetReviewRequest {

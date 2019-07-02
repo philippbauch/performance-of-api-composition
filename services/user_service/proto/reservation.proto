@@ -20,7 +20,7 @@ message GetReservationsRequest {
 }
 
 message GetReservationsResponse {
-    required repeated Reservation reservations = 1;
+    repeated Reservation reservations = 1;
 }
 
 message GetReservationRequest {
