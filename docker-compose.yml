@@ -174,9 +174,6 @@ services:
       GRPC_CACHED_HOST: localhost
       GRPC_CACHED_PORT: 8003
 
-  
-
-
 volumes:
   mongo-user-data:
   mongo-reservation-data:

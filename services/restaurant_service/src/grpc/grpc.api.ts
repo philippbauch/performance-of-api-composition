@@ -20,7 +20,9 @@ export const getRestaurants: handleUnaryCall<
 ) => {
   const { name } = call.request;
   try {
-    const restaurants = await db.findRestaurants({ name });
+    const restaurants = await db.findRestaurants({
+      ...(name && { name })
+    });
     callback(null, { restaurants });
   } catch (error) {
     callback(error, null);
