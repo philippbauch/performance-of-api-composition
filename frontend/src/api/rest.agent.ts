@@ -1,26 +1,30 @@
 import { GraphQLClient } from "graphql-request";
 
-const DEFAULT_REST_HOST = "localhost";
-const DEFAULT_REST_PORT = "8000";
+const DEFAULT_REACT_APP_REST_HOST = "localhost";
+const DEFAULT_REACT_APP_REST_PORT = "8000";
 
-let { REST_HOST, REST_PORT } = process.env;
+let { REACT_APP_REST_HOST, REACT_APP_REST_PORT } = process.env;
 
-if (!REST_HOST) {
+if (!REACT_APP_REST_HOST) {
   console.log(
-    `No REST_HOST specified - fall back to default ${DEFAULT_REST_HOST}`
+    `No REACT_APP_REST_HOST specified - fall back to default ${DEFAULT_REACT_APP_REST_HOST}`
   );
-  REST_HOST = DEFAULT_REST_HOST;
+  REACT_APP_REST_HOST = DEFAULT_REACT_APP_REST_HOST;
 }
 
-if (!REST_PORT) {
+if (!REACT_APP_REST_PORT) {
   console.log(
-    `No REST_PORT specified - fall back to default ${DEFAULT_REST_PORT}`
+    `No REACT_APP_REST_PORT specified - fall back to default ${DEFAULT_REACT_APP_REST_PORT}`
   );
-  REST_PORT = DEFAULT_REST_PORT;
+  REACT_APP_REST_PORT = DEFAULT_REACT_APP_REST_PORT;
 }
 
-console.log(`REST Gateway at: http://${REST_HOST}:${REST_PORT}`);
+console.log(
+  `REST Gateway at: http://${REACT_APP_REST_HOST}:${REACT_APP_REST_PORT}`
+);
 
-const client = new GraphQLClient(`http://${REST_HOST}:${REST_PORT}`);
+const client = new GraphQLClient(
+  `http://${REACT_APP_REST_HOST}:${REACT_APP_REST_PORT}`
+);
 
 export default client;
