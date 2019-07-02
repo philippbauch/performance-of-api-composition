@@ -175,6 +175,28 @@ services:
       USER_PORT: 4040
       PROTO_PATH: /usr/src/app/proto
 
+  grpc-cached-gateway:
+    build: gateways/grpc_cached_gateway
+    depends_on: 
+      - user-service
+      - restaurant-service
+      - reservation-service
+      - review-service
+    restart: always
+    ports:
+      - 8003:8003
+    environment:
+      PORT: 8003
+      RESERVATION_HOST: reservation-service
+      RESERVATION_PORT: 4042
+      RESTAURANT_HOST: restaurant-service
+      RESTAURANT_PORT: 4041
+      REVIEW_HOST: review-service
+      REVIEW_PORT: 4043
+      USER_HOST: user-service
+      USER_PORT: 4040
+      PROTO_PATH: /usr/src/app/proto
+
   # Frontend
   
   frontend:
@@ -183,7 +205,7 @@ services:
       - rest-gateway
       - rest-cached-gateway
       - grpc-gateway
-      # TODO: Add other gateways
+      - grpc-cached-gateway
     restart: always
     ports:
       - 3000:80
