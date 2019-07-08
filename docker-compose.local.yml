@@ -1,7 +1,7 @@
 version: "3"
 services:
 
-  # Databases
+  ### Databases ###
 
   mongo-reservation:
     image: mongo
@@ -39,7 +39,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
 
-  # Services
+  ### Services ###
 
   user-service:
     build: services/user_service
@@ -109,7 +109,7 @@ services:
       REST_PORT: 8083
       PROTO_PATH: /usr/src/app/proto
 
-  # Gateways
+  ### Gateways ###
 
   rest-gateway:
     build: gateways/rest_gateway
@@ -197,7 +197,7 @@ services:
       USER_PORT: 4040
       PROTO_PATH: /usr/src/app/proto
 
-  # Frontend
+  ### Frontend ###
   
   frontend:
     build: frontend
@@ -209,6 +209,7 @@ services:
     restart: always
     ports:
       - 3000:80
+    # Note: Environment variables for the frontend are managed inside its project folder
 
 volumes:
   mongo-user-data:

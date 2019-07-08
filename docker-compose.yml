@@ -1,7 +1,7 @@
 version: "3"
 services:
 
-  # Gateways
+  ### Gateways ###
 
   rest-gateway:
     build: gateways/rest_gateway
@@ -69,8 +69,8 @@ services:
       USER_PORT: 4000
       PROTO_PATH: /usr/src/app/proto
 
-  # Frontend
-  
+  ### Frontend ###
+
   frontend:
     build: frontend
     depends_on:
@@ -81,3 +81,4 @@ services:
     restart: always
     ports:
       - 3000:80
+    # Note: Environment variables for the frontend are managed inside its project folder
