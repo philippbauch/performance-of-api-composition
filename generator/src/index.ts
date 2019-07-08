@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
-dotenv.config();
+dotenv.config({
+  path: process.argv.includes("--local") ? ".env.local" : ".env"
+});
 
 import chalk from "chalk";
 import Chance from "chance";

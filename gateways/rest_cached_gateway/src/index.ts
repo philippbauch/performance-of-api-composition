@@ -39,7 +39,7 @@ if (!PORT) {
 }
 
 const typeDefs = gql`
-  type User {
+  type User @cacheControl(maxAge: 60) {
     id: ID
     email: String
     firstName: String
@@ -48,14 +48,14 @@ const typeDefs = gql`
     reviews: [Review]
   }
 
-  type Address {
+  type Address @cacheControl(maxAge: 60) {
     streetName: String
     houseNumber: Int
     city: String
     zipCode: String
   }
 
-  type Restaurant {
+  type Restaurant @cacheControl(maxAge: 60) {
     id: ID
     name: String
     address: Address
@@ -63,7 +63,7 @@ const typeDefs = gql`
     reservations: [Reservation]
   }
 
-  type Review {
+  type Review @cacheControl(maxAge: 60) {
     id: ID
     user: User
     restaurant: Restaurant
@@ -71,7 +71,7 @@ const typeDefs = gql`
     comment: String
   }
 
-  type Reservation {
+  type Reservation @cacheControl(maxAge: 60) {
     id: ID
     user: User
     restaurant: Restaurant

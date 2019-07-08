@@ -127,7 +127,6 @@ const Sider: React.FunctionComponent<Props> = ({
           time: extensions.tracing.duration
         });
       } catch (error) {
-        console.error(error);
         requests.push({
           ok: false,
           time: 0
@@ -182,23 +181,21 @@ const Sider: React.FunctionComponent<Props> = ({
                 ))}
               </Select>
             </Label>
-            {currentQueryId === 0 ? (
-              <section>
-                <Label text="Query Title" style={{ marginTop: 16 }}>
-                  <Input
-                    onChange={handleQueryTitleChange}
-                    placeholder="Query Title"
-                    value={queryTitle}
-                  />
-                </Label>
-                <Label text="Query" style={{ marginTop: 16 }}>
-                  <TextArea
-                    value={queryContent}
-                    onChange={handleQueryContentChange}
-                  />
-                </Label>
-              </section>
-            ) : null}
+            <section>
+              <Label text="Query Title" style={{ marginTop: 16 }}>
+                <Input
+                  onChange={handleQueryTitleChange}
+                  placeholder="Query Title"
+                  value={queryTitle}
+                />
+              </Label>
+              <Label text="Query" style={{ marginTop: 16 }}>
+                <TextArea
+                  value={queryContent}
+                  onChange={handleQueryContentChange}
+                />
+              </Label>
+            </section>
             <Label text="Select Protocol" style={{ marginTop: 16 }}>
               <Select value={currentProtocolId} onChange={handleProtocolChange}>
                 <Option value={Protocol.REST}>REST</Option>

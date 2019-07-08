@@ -20,12 +20,28 @@ const Main: React.FunctionComponent<Props> = ({
   const pieChartCanvas = React.createRef<HTMLCanvasElement>();
   const lineChartCanvas = React.createRef<HTMLCanvasElement>();
 
-  const countSuccessful = (_requests: Request[]) => {
-    return _requests.filter((request: Request) => request.ok).length;
+  const filterSuccessful = (_requests: Request[]) => {
+    return _requests.filter((request: Request) => request.ok);
   };
 
-  const countFailed = (_requests: Request[]) => {
-    return _requests.filter((request: Request) => !request.ok).length;
+  const filterFailed = (_requests: Request[]) => {
+    return _requests.filter((request: Request) => !request.ok);
+  };
+
+  const calcFastest = (_requests: Request[]) => {
+    return Math.round(
+      _.min(
+        filterSuccessful(requests).map((request: Request) => request.time)
+      )! / 1000000
+    );
+  };
+
+  const calcSlowest = (_requests: Request[]) => {
+    return Math.round(
+      _.max(
+        filterSuccessful(requests).map((request: Request) => request.time)
+      )! / 1000000
+    );
   };
 
   useEffect(() => {
@@ -35,7 +51,10 @@ const Main: React.FunctionComponent<Props> = ({
         labels: ["Success", "Failure"],
         datasets: [
           {
-            data: [countSuccessful(requests), countFailed(requests)],
+            data: [
+              filterSuccessful(requests).length,
+              filterFailed(requests).length
+            ],
             backgroundColor: ["#52c41a", "#f5222d"],
             borderWidth: 1
           }
@@ -107,6 +126,18 @@ const Main: React.FunctionComponent<Props> = ({
           </CardHeader>
           <CardBody>
             <canvas ref={pieChartCanvas} />
+            <p style={{ textAlign: "center", marginTop: 16 }}>
+              Successful Responses:{" "}
+              {requests && requests.length > 0
+                ? filterSuccessful(requests).length
+                : "-"}
+            </p>
+            <p style={{ textAlign: "center" }}>
+              Failed Responses:{" "}
+              {requests && requests.length > 0
+                ? filterFailed(requests).length
+                : "-"}
+            </p>
           </CardBody>
         </Card>
 
@@ -118,8 +149,12 @@ const Main: React.FunctionComponent<Props> = ({
             <h1>
               {requests && requests.length > 0
                 ? `${Math.round(
-                    _.sum(requests.map((request: Request) => request.time)) /
-                      requests.length /
+                    _.sum(
+                      filterSuccessful(requests).map(
+                        (request: Request) => request.time
+                      )
+                    ) /
+                      filterSuccessful(requests).length /
                       1000000
                   )}ms`
                 : "-"}
@@ -133,10 +168,7 @@ const Main: React.FunctionComponent<Props> = ({
           <CardBody>
             <h1>
               {requests && requests.length > 0
-                ? `${Math.round(
-                    _.min(requests.map((request: Request) => request.time))! /
-                      1000000
-                  )}ms`
+                ? `${calcFastest(requests)}ms`
                 : "-"}
             </h1>
           </CardBody>
@@ -148,10 +180,7 @@ const Main: React.FunctionComponent<Props> = ({
           <CardBody>
             <h1>
               {requests && requests.length > 0
-                ? `${Math.round(
-                    _.max(requests.map((request: Request) => request.time))! /
-                      1000000
-                  )}ms`
+                ? `${calcSlowest(requests)}ms`
                 : "-"}
             </h1>
           </CardBody>

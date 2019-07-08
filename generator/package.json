@@ -12,7 +12,8 @@
     "build:clean": "rm -rf dist && npm run build",
     "build:watch": "tsc --watch",
     "dev": "concurrently \"npm:build:watch\" \"nodemon\"",
-    "start": "node ./dist/index.js"
+    "start": "node ./dist/index.js",
+    "start:local": "node ./dist/index.js --local"
   },
   "dependencies": {
     "axios": "^0.19.0",

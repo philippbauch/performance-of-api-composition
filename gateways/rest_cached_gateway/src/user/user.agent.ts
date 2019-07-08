@@ -21,7 +21,7 @@ if (!USER_PORT) {
 }
 
 const URL = `http://${USER_HOST}:${USER_PORT}/`;
-const TIMEOUT = 5000;
+const TIMEOUT = 10000;
 
 const agent = axios.create({
   baseURL: URL,

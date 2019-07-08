@@ -21,7 +21,7 @@ if (!RESERVATION_PORT) {
 }
 
 const URL = `http://${RESERVATION_HOST}:${RESERVATION_PORT}/`;
-const TIMEOUT = 5000;
+const TIMEOUT = 10000;
 
 const agent = axios.create({
   baseURL: URL,

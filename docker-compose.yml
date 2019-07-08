@@ -1,200 +1,72 @@
 version: "3"
 services:
 
-  # Databases
-
-  mongo-reservation:
-    image: mongo
-    restart: always
-    volumes:
-      - mongo-reservation-data:/data
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
-  mongo-restaurant:
-    image: mongo
-    restart: always
-    volumes:
-      - mongo-restaurant-data:/data
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
-  mongo-review:
-    image: mongo
-    restart: always
-    volumes:
-      - mongo-review-data:/data
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
-  mongo-user:
-    image: mongo
-    restart: always
-    volumes:
-      - mongo-user-data:/data
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-
-  # Services
-
-  user-service:
-    build: services/user_service
-    links:
-      - mongo-user:mongo
-    restart: always
-    ports:
-      - 8080:8080
-    environment:
-      DB_NAME: poac
-      DB_HOST: mongo
-      DB_PORT: 27017
-      DB_USER: root
-      DB_PASSWORD: example
-      GRPC_PORT: 4040
-      REST_PORT: 8080
-      PROTO_PATH: /usr/src/app/proto
-
-  restaurant-service:
-    build: services/restaurant_service
-    links:
-      - mongo-restaurant:mongo
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      DB_NAME: poac
-      DB_HOST: mongo
-      DB_PORT: 27017
-      DB_USER: root
-      DB_PASSWORD: example
-      GRPC_PORT: 4041
-      REST_PORT: 8081
-      PROTO_PATH: /usr/src/app/proto
-
-  reservation-service:
-    build: services/reservation_service
-    links:
-      - mongo-reservation:mongo
-    restart: always
-    ports:
-      - 8082:8082
-    environment:
-      DB_NAME: poac
-      DB_HOST: mongo
-      DB_PORT: 27017
-      DB_USER: root
-      DB_PASSWORD: example
-      GRPC_PORT: 4042
-      REST_PORT: 8082
-      PROTO_PATH: /usr/src/app/proto
-
-  review-service:
-    build: services/review_service
-    links:
-      - mongo-review:mongo
-    restart: always
-    ports:
-      - 8083:8083
-    environment:
-      DB_NAME: poac
-      DB_HOST: mongo
-      DB_PORT: 27017
-      DB_USER: root
-      DB_PASSWORD: example
-      GRPC_PORT: 4043
-      REST_PORT: 8083
-      PROTO_PATH: /usr/src/app/proto
-
   # Gateways
 
   rest-gateway:
     build: gateways/rest_gateway
-    depends_on: 
-      - user-service
-      - restaurant-service
-      - reservation-service
-      - review-service
     restart: always
     ports:
       - 8000:8000
     environment:
       PORT: 8000
-      RESERVATION_HOST: reservation-service
-      RESERVATION_PORT: 8082
-      RESTAURANT_HOST: restaurant-service
-      RESTAURANT_PORT: 8081
-      REVIEW_HOST: review-service
-      REVIEW_PORT: 8083
-      USER_HOST: user-service
-      USER_PORT: 8080
+      RESERVATION_HOST: ec2-52-59-18-115.eu-central-1.compute.amazonaws.com
+      RESERVATION_PORT: 8000
+      RESTAURANT_HOST: ec2-18-197-90-209.eu-central-1.compute.amazonaws.com
+      RESTAURANT_PORT: 8000
+      REVIEW_HOST: ec2-35-159-46-195.eu-central-1.compute.amazonaws.com
+      REVIEW_PORT: 8000
+      USER_HOST: ec2-3-122-59-179.eu-central-1.compute.amazonaws.com
+      USER_PORT: 8000
 
   rest-cached-gateway:
     build: gateways/rest_cached_gateway
-    depends_on: 
-      - user-service
-      - restaurant-service
-      - reservation-service
-      - review-service
     restart: always
     ports:
       - 8002:8002
     environment:
       PORT: 8002
-      RESERVATION_HOST: reservation-service
-      RESERVATION_PORT: 8082
-      RESTAURANT_HOST: restaurant-service
-      RESTAURANT_PORT: 8081
-      REVIEW_HOST: review-service
-      REVIEW_PORT: 8083
-      USER_HOST: user-service
-      USER_PORT: 8080
+      RESERVATION_HOST: ec2-52-59-18-115.eu-central-1.compute.amazonaws.com
+      RESERVATION_PORT: 8000
+      RESTAURANT_HOST: ec2-18-197-90-209.eu-central-1.compute.amazonaws.com
+      RESTAURANT_PORT: 8000
+      REVIEW_HOST: ec2-35-159-46-195.eu-central-1.compute.amazonaws.com
+      REVIEW_PORT: 8000
+      USER_HOST: ec2-3-122-59-179.eu-central-1.compute.amazonaws.com
+      USER_PORT: 8000
 
   grpc-gateway:
     build: gateways/grpc_gateway
-    depends_on: 
-      - user-service
-      - restaurant-service
-      - reservation-service
-      - review-service
     restart: always
     ports:
       - 8001:8001
     environment:
       PORT: 8001
-      RESERVATION_HOST: reservation-service
-      RESERVATION_PORT: 4042
-      RESTAURANT_HOST: restaurant-service
-      RESTAURANT_PORT: 4041
-      REVIEW_HOST: review-service
-      REVIEW_PORT: 4043
-      USER_HOST: user-service
-      USER_PORT: 4040
+      RESERVATION_HOST: ec2-52-59-18-115.eu-central-1.compute.amazonaws.com
+      RESERVATION_PORT: 4000
+      RESTAURANT_HOST: ec2-18-197-90-209.eu-central-1.compute.amazonaws.com
+      RESTAURANT_PORT: 4000
+      REVIEW_HOST: ec2-35-159-46-195.eu-central-1.compute.amazonaws.com
+      REVIEW_PORT: 4000
+      USER_HOST: ec2-3-122-59-179.eu-central-1.compute.amazonaws.com
+      USER_PORT: 4000
       PROTO_PATH: /usr/src/app/proto
 
   grpc-cached-gateway:
     build: gateways/grpc_cached_gateway
-    depends_on: 
-      - user-service
-      - restaurant-service
-      - reservation-service
-      - review-service
     restart: always
     ports:
       - 8003:8003
     environment:
       PORT: 8003
-      RESERVATION_HOST: reservation-service
-      RESERVATION_PORT: 4042
-      RESTAURANT_HOST: restaurant-service
-      RESTAURANT_PORT: 4041
-      REVIEW_HOST: review-service
-      REVIEW_PORT: 4043
-      USER_HOST: user-service
-      USER_PORT: 4040
+      RESERVATION_HOST: ec2-52-59-18-115.eu-central-1.compute.amazonaws.com
+      RESERVATION_PORT: 4000
+      RESTAURANT_HOST: ec2-18-197-90-209.eu-central-1.compute.amazonaws.com
+      RESTAURANT_PORT: 4000
+      REVIEW_HOST: ec2-35-159-46-195.eu-central-1.compute.amazonaws.com
+      REVIEW_PORT: 4000
+      USER_HOST: ec2-3-122-59-179.eu-central-1.compute.amazonaws.com
+      USER_PORT: 4000
       PROTO_PATH: /usr/src/app/proto
 
   # Frontend
@@ -209,9 +81,3 @@ services:
     restart: always
     ports:
       - 3000:80
-
-volumes:
-  mongo-user-data:
-  mongo-reservation-data:
-  mongo-restaurant-data:
-  mongo-review-data:
