@@ -9,7 +9,7 @@ or host everything locally yourself.
 
 The gateways and frontend in any case remain on your local machine.
 
-## Run with services deployed to AWS
+## Run with services deployed on AWS
 
 As this configuration has mainly been used during the performance analysis, setting up the project
 to communicate with the services in the default case. You only have to spin up the gateways and the
@@ -19,6 +19,17 @@ You can also use docker-compose to shut down the containers with `docker-compose
 
 The gateways are preconfigured to communicate with the services deployed on AWS and
 require no further configuration to work.
+
+### Generate fake data
+
+You can use the generator tool located in `/generator` to generate any amount of fake data to test your queries.
+On the command line, navigate to the folder with `cd generator` and install all required dependencies with `npm install`.
+After that, use `npm run build` to build the generator project and `npm start` to launch the script afterward.
+
+You should then be asked to enter any amount of users and restaurants you want to create.
+The generator will create fake users and restaurants and communicate with services to insert the data into their databases.
+
+If the generator find existing entries in a service's database, it will ask you if you want to override the data.
 
 ## Run everything on your local machine
 
@@ -34,3 +45,8 @@ For a clean shutdown of the containers you also have to pass the `-f` flag to do
 `docker-compose -f docker-compose.local.yml down`.
 As `docker-compose down` is a destructive command, it will remove all containers and volumes after
 termination. If you want to persist the data and volumes that are used by the databases among multiple lifecycles of your containers, you should use `docker-compose -f docker-compose.local.yml stop`.
+
+### Generate fake data
+
+If you run everything on your local machine the generator requires the exact same steps to install dependencies and build the project. After this, you then have to run `npm run start:local` to tell the generator to communicate with the services
+and are deployed locally on your machine.
