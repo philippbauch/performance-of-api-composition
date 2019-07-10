@@ -9,6 +9,13 @@ or host everything locally yourself.
 
 The gateways and frontend in any case remain on your local machine.
 
+NOTE: This project has been developed and tested on a machine running macOS. I'm not quite sure if everything works fine
+on other operating system.
+
+## Prerequisits
+
+docker, docker-compose, node
+
 ## Run with services deployed on AWS
 
 As this configuration has mainly been used during the performance analysis, setting up the project
