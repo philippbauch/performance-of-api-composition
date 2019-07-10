@@ -5,6 +5,8 @@ import React, { useEffect } from "react";
 import Card, { CardBody, CardHeader } from "../components/Card";
 import { Request } from "../models/Request";
 import "./index.scss";
+import Level from "../components/Level";
+import Table, { TableRow, TableColumn } from "../components/Table";
 
 interface Props {
   isRunning: boolean;
@@ -114,7 +116,17 @@ const Main: React.FunctionComponent<Props> = ({
       <section className="reporting" style={{ marginBottom: 16 }}>
         <Card style={{ gridArea: "line" }}>
           <CardHeader>
-            <h4>Response Time</h4>
+            <Level>
+              <h4>Response Time</h4>
+              <Button
+                size="small"
+                type="primary"
+                disabled={!requests || requests.length === 0 || isRunning}
+                onClick={onReset}
+              >
+                Reset
+              </Button>
+            </Level>
           </CardHeader>
           <CardBody>
             <canvas ref={lineChartCanvas} />
@@ -127,13 +139,13 @@ const Main: React.FunctionComponent<Props> = ({
           <CardBody>
             <canvas ref={pieChartCanvas} />
             <p style={{ textAlign: "center", marginTop: 16 }}>
-              Successful Responses:{" "}
+              Successful Requests:{" "}
               {requests && requests.length > 0
                 ? filterSuccessful(requests).length
                 : "-"}
             </p>
             <p style={{ textAlign: "center" }}>
-              Failed Responses:{" "}
+              Failed Requests:{" "}
               {requests && requests.length > 0
                 ? filterFailed(requests).length
                 : "-"}
@@ -186,9 +198,37 @@ const Main: React.FunctionComponent<Props> = ({
           </CardBody>
         </Card>
       </section>
-      <Button type="primary" disabled={isRunning} onClick={onReset}>
-        Clear
-      </Button>
+      {requests && requests.length > 0 ? (
+        <Card>
+          <CardHeader>
+            <Level>
+              <h4>Responses</h4>
+              <Button
+                size="small"
+                type="primary"
+                disabled={!requests || requests.length === 0 || isRunning}
+              >
+                Export
+              </Button>
+            </Level>
+          </CardHeader>
+          <CardBody padded={false}>
+            <Table
+              data={requests}
+              columnTitles={["ID", "Duration (ms)", "Successful"]}
+              renderRow={(request: Request, index: number) => (
+                <TableRow key={index}>
+                  <TableColumn>{request.id}</TableColumn>
+                  <TableColumn>
+                    {Math.round(request.duration / 1000000)}
+                  </TableColumn>
+                  <TableColumn>{request.ok ? "Yes" : "No"}</TableColumn>
+                </TableRow>
+              )}
+            />
+          </CardBody>
+        </Card>
+      ) : null}
     </div>
   );
 };

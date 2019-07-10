@@ -1,4 +1,4 @@
-import { Button, Select, Switch, Progress, Spin } from "antd";
+import { Button, Progress, Select, Spin, Switch } from "antd";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import grpcCachedAgent from "../api/grpc-cached.agent";
@@ -36,7 +36,7 @@ const Sider: React.FunctionComponent<Props> = ({
     value: amount,
     setValue: setAmount,
     handleChange: handleAmountChange
-  } = useFormInput("1");
+  } = useFormInput("10");
   const [currentProtocol, setCurrentProtocol] = useState<Protocol>(
     Protocol.REST
   );
@@ -88,7 +88,7 @@ const Sider: React.FunctionComponent<Props> = ({
   };
 
   const resetQuery = () => {
-    setAmount("1");
+    setAmount("10");
     setCurrentProtocol(Protocol.REST);
     setCurrentQueryId(-1);
     setIsCaching(false);
