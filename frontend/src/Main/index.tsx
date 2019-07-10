@@ -2,11 +2,13 @@ import { Alert, Button } from "antd";
 import Chart from "chart.js";
 import _ from "lodash";
 import React, { useEffect } from "react";
+import { CSVDownload, CSVLink } from "react-csv";
 import Card, { CardBody, CardFooter, CardHeader } from "../components/Card";
 import Level from "../components/Level";
 import Table, { TableColumn, TableRow } from "../components/Table";
 import { Request } from "../models/Request";
 import "./index.scss";
+import { Protocol } from "../models/Protocol";
 
 interface Props {
   isRunning: boolean;
@@ -111,6 +113,21 @@ const Main: React.FunctionComponent<Props> = ({
     };
   }, [requests]);
 
+  const getFilename = () => {
+    const protocol = requests[0].protocol === Protocol.REST ? "rest" : "grpc";
+    const cached = requests[0].caching ? "-cached" : "";
+    return `requests-${protocol}${cached}`;
+  };
+
+  const formatExportData = () => {
+    return requests.map((request: Request) => ({
+      ...request,
+      caching: request.caching ? 1 : 0,
+      ok: request.ok ? 1 : 0,
+      protocol: request.protocol === Protocol.REST ? "REST" : "GRPC"
+    }));
+  };
+
   return (
     <div className="main">
       <section className="reporting" style={{ marginBottom: 16 }}>
@@ -208,7 +225,20 @@ const Main: React.FunctionComponent<Props> = ({
                 type="primary"
                 disabled={!requests || requests.length === 0 || isRunning}
               >
-                Export
+                <CSVLink
+                  filename={getFilename()}
+                  data={formatExportData()}
+                  headers={[
+                    "timestamp",
+                    "id",
+                    "duration",
+                    "ok",
+                    "protocol",
+                    "caching"
+                  ]}
+                >
+                  Export
+                </CSVLink>
               </Button>
             </Level>
           </CardHeader>
