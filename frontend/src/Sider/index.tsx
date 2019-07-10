@@ -164,7 +164,7 @@ const Sider: React.FunctionComponent<Props> = ({
 
   return (
     <div className="sider">
-      <Card style={{ height: "100%" }}>
+      <Card>
         <CardHeader>
           <h4>Configuration</h4>
         </CardHeader>

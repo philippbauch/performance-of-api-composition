@@ -2,7 +2,7 @@
 
 .layout {
   padding: $padding-md;
-  height: 100vh;
+  height: 100%;
   display: grid;
   grid-gap: $margin-md;
   grid-template-columns: $sider-width 1fr;

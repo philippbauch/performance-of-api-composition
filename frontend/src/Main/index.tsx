@@ -1,12 +1,12 @@
-import { Button } from "antd";
+import { Alert, Button } from "antd";
 import Chart from "chart.js";
 import _ from "lodash";
 import React, { useEffect } from "react";
-import Card, { CardBody, CardHeader } from "../components/Card";
+import Card, { CardBody, CardFooter, CardHeader } from "../components/Card";
+import Level from "../components/Level";
+import Table, { TableColumn, TableRow } from "../components/Table";
 import { Request } from "../models/Request";
 import "./index.scss";
-import Level from "../components/Level";
-import Table, { TableRow, TableColumn } from "../components/Table";
 
 interface Props {
   isRunning: boolean;
@@ -214,7 +214,7 @@ const Main: React.FunctionComponent<Props> = ({
           </CardHeader>
           <CardBody padded={false}>
             <Table
-              data={requests}
+              data={requests.slice(0, 20)}
               columnTitles={["ID", "Duration (ms)", "Successful"]}
               renderRow={(request: Request, index: number) => (
                 <TableRow key={index}>
@@ -227,6 +227,15 @@ const Main: React.FunctionComponent<Props> = ({
               )}
             />
           </CardBody>
+          {requests && requests.length > 20 ? (
+            <CardFooter>
+              <Alert
+                showIcon={true}
+                message="The table only shows the first 20 results. Export the data to see all requests."
+                type="info"
+              />
+            </CardFooter>
+          ) : null}
         </Card>
       ) : null}
     </div>
