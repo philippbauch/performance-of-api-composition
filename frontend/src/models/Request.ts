@@ -1,4 +1,10 @@
+import { Protocol } from "./Protocol";
+
 export interface Request {
+  id: number;
   ok: boolean;
-  time: number;
+  duration: number;
+  timestamp: number;
+  protocol: Protocol;
+  caching: boolean;
 }

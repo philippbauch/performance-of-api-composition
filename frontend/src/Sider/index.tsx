@@ -1,4 +1,4 @@
-import { Button, Select, Switch } from "antd";
+import { Button, Select, Switch, Progress, Spin } from "antd";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import grpcCachedAgent from "../api/grpc-cached.agent";
@@ -37,11 +37,12 @@ const Sider: React.FunctionComponent<Props> = ({
     setValue: setAmount,
     handleChange: handleAmountChange
   } = useFormInput("1");
-  const [currentProtocolId, setCurrentProtocolId] = useState<number>(
+  const [currentProtocol, setCurrentProtocol] = useState<Protocol>(
     Protocol.REST
   );
-  const [currentQueryId, setCurrentQueryId] = useState<number>(0);
-  const [isEnableCaching, setIsEnableCaching] = useState<boolean>(false);
+  const [currentQueryId, setCurrentQueryId] = useState<number>(-1);
+  const [isCaching, setIsCaching] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
   const [queries, setQueries] = useState<Query[]>([]);
   const {
     value: queryContent,
@@ -54,104 +55,102 @@ const Sider: React.FunctionComponent<Props> = ({
     handleChange: handleQueryTitleChange
   } = useFormInput("");
 
-  const handleProtocolChange = (protocolId: number) => {
-    if (protocolId === currentProtocolId) {
+  const handleProtocolChange = (protocol: number) => {
+    if (protocol === currentProtocol) {
       return;
     }
-    setCurrentProtocolId(protocolId);
+    setCurrentProtocol(protocol);
   };
 
   const handleQueryChange = (queryId: number) => {
     if (queryId === currentQueryId) {
       return;
-    }
-    if (queryId !== 0) {
+    } else if (queryId >= 0) {
       setCurrentQueryId(queryId);
-      const query = queries[queryId - 1];
-      setAmount(String(query.amount));
-      setCurrentProtocolId(query.protocol);
-      setIsEnableCaching(query.caching);
+      const query = queries[queryId];
       setQueryContent(query.content);
       setQueryTitle(query.title);
     } else {
-      resetQuery();
+      setQueryContent("");
+      setQueryTitle("");
     }
   };
 
   const removeQuery = () => {
-    const queryToRemove = queries[currentQueryId - 1];
-    const queriesNew = _.without(queries, queryToRemove);
+    const queryToRemove = queries[currentQueryId];
+    const queriesWithout = _.without(queries, queryToRemove);
     const queriesStringified = JSON.stringify({
-      queries: queriesNew
+      queries: queriesWithout
     });
     localStorage.setItem("queries", queriesStringified);
-    setQueries(queriesNew);
+    setQueries(queriesWithout);
     resetQuery();
   };
 
   const resetQuery = () => {
     setAmount("1");
-    setCurrentProtocolId(Protocol.REST);
-    setCurrentQueryId(0);
-    setIsEnableCaching(false);
+    setCurrentProtocol(Protocol.REST);
+    setCurrentQueryId(-1);
+    setIsCaching(false);
     setQueryContent("");
     setQueryTitle("");
   };
 
+  const chooseClient = () => {
+    return currentProtocol === Protocol.REST
+      ? isCaching
+        ? restCachedAgent
+        : restAgent
+      : isCaching
+      ? grpcCachedAgent
+      : grpcAgent;
+  };
+
   const runQuery = async () => {
     onStartRunning();
-    const client: any =
-      currentProtocolId === Protocol.REST
-        ? isEnableCaching
-          ? restCachedAgent
-          : restAgent
-        : isEnableCaching
-        ? grpcCachedAgent
-        : grpcAgent;
-
-    const query: Query = {
-      title: queryTitle,
-      content: queryContent,
-      protocol: currentProtocolId,
-      caching: isEnableCaching,
-      amount: Number(amount)
-    };
-
+    const client: any = chooseClient();
     const requests: Request[] = [];
-
-    for (let i = 0; i < Number(amount); i++) {
+    for (let id = 0; id < Number(amount); id++) {
+      const timestamp = Date.now();
+      const partialRequest = {
+        id,
+        timestamp,
+        protocol: currentProtocol,
+        caching: isCaching
+      };
       try {
-        const { extensions } = await client.rawRequest(query.content);
+        const { extensions } = await client.rawRequest(queryContent);
         requests.push({
+          ...partialRequest,
           ok: true,
-          time: extensions.tracing.duration
+          duration: extensions.tracing.duration
         });
       } catch (error) {
         requests.push({
+          ...partialRequest,
           ok: false,
-          time: 0
+          duration: 0
         });
       }
+      setProgress(((id + 1) / Number(amount)) * 100);
     }
     onRequests(requests);
     onStopRunning();
+    setProgress(0);
   };
 
   const saveQuery = () => {
     const query: Query = {
       title: queryTitle,
-      content: queryContent,
-      protocol: currentProtocolId,
-      caching: isEnableCaching,
-      amount: Number(amount)
+      content: queryContent
     };
-    const queriesNew = [...queries, query];
+    const queriesWith = [...queries, query];
     const queriesStringified = JSON.stringify({
-      queries: queriesNew
+      queries: queriesWith
     });
     localStorage.setItem("queries", queriesStringified);
-    setQueries(queriesNew);
-    setCurrentQueryId(queries.length + 1);
+    setQueries(queriesWith);
+    setCurrentQueryId(queriesWith.length - 1);
   };
 
   useEffect(() => {
@@ -170,67 +169,78 @@ const Sider: React.FunctionComponent<Props> = ({
           <h4>Configuration</h4>
         </CardHeader>
         <CardBody darker={true}>
-          <section>
-            <Label text="Select Query">
-              <Select value={currentQueryId} onChange={handleQueryChange}>
-                <Option value={0}>New Query</Option>
-                {queries.map((query: Query, index: number) => (
-                  <Option key={index} value={index + 1}>
-                    {query.title}
-                  </Option>
-                ))}
-              </Select>
-            </Label>
+          <Spin spinning={isRunning}>
             <section>
-              <Label text="Query Title" style={{ marginTop: 16 }}>
-                <Input
-                  onChange={handleQueryTitleChange}
-                  placeholder="Query Title"
-                  value={queryTitle}
+              <Label text="Select Query">
+                <Select value={currentQueryId} onChange={handleQueryChange}>
+                  <Option value={-1}>New Query</Option>
+                  {queries.map((query: Query, index: number) => (
+                    <Option key={index} value={index}>
+                      {query.title}
+                    </Option>
+                  ))}
+                </Select>
+              </Label>
+              <section>
+                <Label text="Query Title" style={{ marginTop: 16 }}>
+                  <Input
+                    onChange={handleQueryTitleChange}
+                    placeholder="Query Title"
+                    value={queryTitle}
+                  />
+                </Label>
+                <Label text="Query" style={{ marginTop: 16 }} required={true}>
+                  <TextArea
+                    value={queryContent}
+                    onChange={handleQueryContentChange}
+                  />
+                </Label>
+              </section>
+              <Label text="Select Protocol" style={{ marginTop: 16 }}>
+                <Select
+                  value={currentProtocol}
+                  onChange={handleProtocolChange}
+                  disabled={isRunning}
+                >
+                  <Option value={Protocol.REST}>REST</Option>
+                  <Option value={Protocol.GRPC}>gRPC</Option>
+                </Select>
+              </Label>
+              <Label text="Enable Caching" style={{ marginTop: 16 }}>
+                <Switch
+                  disabled={isRunning}
+                  checked={isCaching}
+                  onChange={(enableCaching: boolean) =>
+                    setIsCaching(enableCaching)
+                  }
                 />
               </Label>
-              <Label text="Query" style={{ marginTop: 16 }}>
-                <TextArea
-                  value={queryContent}
-                  onChange={handleQueryContentChange}
+              <Label text="Amount" style={{ marginTop: 16 }}>
+                <Input
+                  onChange={handleAmountChange}
+                  placeholder="Amount"
+                  value={amount}
+                  type="number"
                 />
               </Label>
             </section>
-            <Label text="Select Protocol" style={{ marginTop: 16 }}>
-              <Select value={currentProtocolId} onChange={handleProtocolChange}>
-                <Option value={Protocol.REST}>REST</Option>
-                <Option value={Protocol.GRPC}>gRPC</Option>
-              </Select>
-            </Label>
-            <Label text="Enable Caching" style={{ marginTop: 16 }}>
-              <Switch
-                checked={isEnableCaching}
-                onChange={(enableCaching: boolean) =>
-                  setIsEnableCaching(enableCaching)
-                }
-              />
-            </Label>
-            <Label text="Amount" style={{ marginTop: 16 }}>
-              <Input
-                onChange={handleAmountChange}
-                placeholder="Amount"
-                value={amount}
-                type="number"
-              />
-            </Label>
-          </section>
+          </Spin>
           <section style={{ marginTop: 48 }}>
             <Button
               loading={isRunning}
               type="primary"
               block={true}
               onClick={runQuery}
+              disabled={!queryContent}
             >
               Run
             </Button>
+            {isRunning && (
+              <Progress percent={progress} status="active" showInfo={false} />
+            )}
             <Level>
               <Button
-                disabled={currentQueryId !== 0 || isRunning}
+                disabled={currentQueryId >= 0 || isRunning}
                 onClick={saveQuery}
                 style={{ marginTop: 16, marginRight: 16, width: "50%" }}
               >
@@ -245,7 +255,7 @@ const Sider: React.FunctionComponent<Props> = ({
               </Button>
             </Level>
             <Button
-              disabled={currentQueryId === 0 || isRunning}
+              disabled={currentQueryId === -1 || isRunning}
               onClick={removeQuery}
               type="danger"
               block={true}

@@ -17,8 +17,8 @@ const Main: React.FunctionComponent<Props> = ({
   requests,
   onReset
 }) => {
-  const pieChartCanvas = React.createRef<HTMLCanvasElement>();
   const lineChartCanvas = React.createRef<HTMLCanvasElement>();
+  const pieChartCanvas = React.createRef<HTMLCanvasElement>();
 
   const filterSuccessful = (_requests: Request[]) => {
     return _requests.filter((request: Request) => request.ok);
@@ -31,7 +31,7 @@ const Main: React.FunctionComponent<Props> = ({
   const calcFastest = (_requests: Request[]) => {
     return Math.round(
       _.min(
-        filterSuccessful(requests).map((request: Request) => request.time)
+        filterSuccessful(requests).map((request: Request) => request.duration)
       )! / 1000000
     );
   };
@@ -39,7 +39,7 @@ const Main: React.FunctionComponent<Props> = ({
   const calcSlowest = (_requests: Request[]) => {
     return Math.round(
       _.max(
-        filterSuccessful(requests).map((request: Request) => request.time)
+        filterSuccessful(requests).map((request: Request) => request.duration)
       )! / 1000000
     );
   };
@@ -86,7 +86,7 @@ const Main: React.FunctionComponent<Props> = ({
             borderColor: "#1890ff",
             data: requests.map((request: Request, index: number) => ({
               x: index + 1,
-              y: request.time / 1000000
+              y: request.duration / 1000000
             }))
           }
         ]
@@ -151,7 +151,7 @@ const Main: React.FunctionComponent<Props> = ({
                 ? `${Math.round(
                     _.sum(
                       filterSuccessful(requests).map(
-                        (request: Request) => request.time
+                        (request: Request) => request.duration
                       )
                     ) /
                       filterSuccessful(requests).length /

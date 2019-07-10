@@ -19,9 +19,7 @@ const App: React.FunctionComponent = () => {
       />
       <Main
         isRunning={isRunning}
-        onReset={() => {
-          setRequests([]);
-        }}
+        onReset={() => setRequests([])}
         requests={requests}
       />
     </Layout>
