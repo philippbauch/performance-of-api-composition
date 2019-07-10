@@ -11,10 +11,6 @@ if (!REACT_APP_REST_PORT) {
   REACT_APP_REST_PORT = DEFAULT_REACT_APP_REST_PORT;
 }
 
-console.log(
-  `REST Gateway at: http://localhost:${REACT_APP_REST_PORT}`
-);
-
 const client = new GraphQLClient(
   `http://localhost:${REACT_APP_REST_PORT}`
 );
