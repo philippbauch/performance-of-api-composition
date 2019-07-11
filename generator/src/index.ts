@@ -13,7 +13,7 @@ import { User } from "./models/User";
 import {
   deleteReservation,
   getReservations,
-  postReservation,
+  postReservation
 } from "./reservation/reservation.api";
 import {
   deleteRestaurant,
@@ -23,11 +23,13 @@ import {
 import { deleteReview, getReviews, postReview } from "./review/review.api";
 import { deleteUser, getUsers, postUser } from "./user/user.api";
 
-const PROBABILITY_RESERVATION = 5;
-const PROBABILITY_REVIEW = 5;
-
 (async () => {
-  const { usersAmount, restaurantsAmount } = await inquirer.prompt([
+  const {
+    usersAmount,
+    restaurantsAmount,
+    reservationProbability,
+    reviewProbability
+  } = await inquirer.prompt([
     {
       type: "input",
       name: "usersAmount",
@@ -46,6 +48,30 @@ const PROBABILITY_REVIEW = 5;
       )} do you want to generate?`,
       validate: value => {
         const valid = !isNaN(parseInt(value, 10));
+        return valid || "Please enter a number";
+      },
+      filter: Number
+    },
+    {
+      type: "input",
+      name: "reservationProbability",
+      message: `Enter the probability (in %) for a ${chalk.cyan.bold(
+        "reservation"
+      )}:`,
+      validate: value => {
+        const valid = !isNaN(parseFloat(value));
+        return valid || "Please enter a number";
+      },
+      filter: Number
+    },
+    {
+      type: "input",
+      name: "reviewProbability",
+      message: `Enter the probability (in %) for a ${chalk.cyan.bold(
+        "review"
+      )}:`,
+      validate: value => {
+        const valid = !isNaN(parseFloat(value));
         return valid || "Please enter a number";
       },
       filter: Number
@@ -298,7 +324,7 @@ const PROBABILITY_REVIEW = 5;
     );
     for (const user of users) {
       for (const restaurant of restaurants) {
-        if (chance.bool({ likelihood: PROBABILITY_RESERVATION })) {
+        if (chance.bool({ likelihood: reservationProbability })) {
           const reservation = {
             date: faker.date.future().toUTCString(),
             pax: Math.floor(Math.random() * 10) + 1,
@@ -382,7 +408,7 @@ const PROBABILITY_REVIEW = 5;
     );
     for (const user of users) {
       for (const restaurant of restaurants) {
-        if (chance.bool({ likelihood: PROBABILITY_REVIEW })) {
+        if (chance.bool({ likelihood: reviewProbability })) {
           const review = {
             comment: faker.lorem.sentence(),
             rating: Math.floor(Math.random() * 5) + 1,
