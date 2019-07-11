@@ -7,7 +7,7 @@ interface LabelProps {
   extra?: React.ReactNode;
   required?: boolean;
   style?: any;
-  text: string | null | undefined;
+  text: React.ReactNode | null | undefined;
 }
 
 const Label: React.FunctionComponent<LabelProps> = ({
@@ -18,12 +18,10 @@ const Label: React.FunctionComponent<LabelProps> = ({
   text
 }) => {
   return (
-    <div className="sprova-label-wrapper" style={{ ...style }}>
+    <div className="label-wrapper" style={{ ...style }}>
       {text ? (
-        <Level className="sprova-label">
-          <label
-            className={cx("sprova-label-text", { "is-required": required })}
-          >
+        <Level className="label">
+          <label className={cx("label-text", { "is-required": required })}>
             {text}
           </label>
           {extra}

@@ -22,14 +22,14 @@ const List: React.FunctionComponent<Props> = ({
   zebra = false
 }) => {
   return (
-    <div className="sprova-list" style={{ ...style }}>
+    <div className="list" style={{ ...style }}>
       {data.length > 0 ? (
-        <ul className={classnames("sprova-list-items")}>
+        <ul className={classnames("list-items")}>
           {data.map((item: any, index: number) => (
             <li
               key={index}
               className={classnames(
-                "sprova-list-item",
+                "list-item",
                 { "is-small": small },
                 { "is-clickable": onItemClick },
                 { "is-zebra": zebra }
@@ -42,11 +42,9 @@ const List: React.FunctionComponent<Props> = ({
           ))}
         </ul>
       ) : (
-        <div className={classnames("sprova-list-empty")}>
+        <div className={classnames("list-empty")}>
           {empty || (
-            <span className={classnames("sprova-list-empty-item")}>
-              No data.
-            </span>
+            <span className={classnames("list-empty-item")}>No data.</span>
           )}
         </div>
       )}

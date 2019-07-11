@@ -11,7 +11,7 @@ export const TableColumn: React.FunctionComponent<TableColumnProps> = ({
   style
 }) => {
   return (
-    <td className={classnames("sprova-table-column")} style={{ ...style }}>
+    <td className={classnames("table-column")} style={{ ...style }}>
       {children}
     </td>
   );
@@ -29,7 +29,7 @@ export const TableRow: React.FunctionComponent<TableRowProps> = ({
 }) => {
   return (
     <tr
-      className={classnames("sprova-table-row", {
+      className={classnames("table-row", {
         "is-clickable": onClick
       })}
       onClick={onClick}
@@ -56,22 +56,22 @@ const Table: React.FunctionComponent<TableProps> = ({
   style
 }) => {
   return data && data.length > 0 ? (
-    <table className="sprova-table" style={{ ...style }}>
-      <thead className="sprova-table-head">
+    <table className="table" style={{ ...style }}>
+      <thead className="table-head">
         <TableRow>
           {columnTitles.map((column: string, index: number) => (
             <th key={index}>{column}</th>
           ))}
         </TableRow>
       </thead>
-      <tbody className="sprova-table-body">
+      <tbody className="table-body">
         {data.map((item: any, index: number) => renderRow(item, index))}
       </tbody>
     </table>
   ) : (
-    <div className={classnames("sprova-table-empty")}>
+    <div className={classnames("table-empty")}>
       {empty || (
-        <span className={classnames("sprova-table-empty-item")}>No data.</span>
+        <span className={classnames("table-empty-item")}>No data.</span>
       )}
     </div>
   );

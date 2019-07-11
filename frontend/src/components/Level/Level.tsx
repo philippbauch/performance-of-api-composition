@@ -18,7 +18,7 @@ const Level: React.FunctionComponent<Props> = ({
     <div
       className={classnames(
         className,
-        "sprova-level",
+        "level",
         { "align-top": align === "top" },
         { "align-center": align === "center" },
         { "align-bottom": align === "bottom" }

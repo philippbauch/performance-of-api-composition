@@ -1,4 +1,4 @@
-import { Button, Progress, Select, Spin, Switch } from "antd";
+import { Button, Icon, Progress, Select, Spin, Switch, Tooltip } from "antd";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import grpcCachedAgent from "../api/grpc-cached.agent";
@@ -24,6 +24,10 @@ interface Props {
   onRequests: (requests: Request[]) => void;
   onStartRunning: () => void;
   onStopRunning: () => void;
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve: any) => setTimeout(resolve, ms));
 }
 
 const Sider: React.FunctionComponent<Props> = ({
@@ -54,6 +58,11 @@ const Sider: React.FunctionComponent<Props> = ({
     setValue: setQueryTitle,
     handleChange: handleQueryTitleChange
   } = useFormInput("");
+  const {
+    value: sleepTime,
+    setValue: setSleepTime,
+    handleChange: handleSleepTimeChange
+  } = useFormInput("0");
 
   const handleProtocolChange = (protocol: number) => {
     if (protocol === currentProtocol) {
@@ -95,6 +104,7 @@ const Sider: React.FunctionComponent<Props> = ({
     setIsCaching(false);
     setQueryContent("");
     setQueryTitle("");
+    setSleepTime("0");
   };
 
   const chooseClient = () => {
@@ -134,6 +144,9 @@ const Sider: React.FunctionComponent<Props> = ({
         });
       }
       setProgress(((id + 1) / Number(amount)) * 100);
+      if (id < Number(amount) - 1) {
+        await sleep(Number(sleepTime));
+      }
     }
     onRequests(requests);
     onStopRunning();
@@ -216,11 +229,41 @@ const Sider: React.FunctionComponent<Props> = ({
                   }
                 />
               </Label>
-              <Label text="Amount" style={{ marginTop: 16 }}>
+              <Label
+                text={
+                  <Tooltip
+                    placement="right"
+                    title={"Number of requests to send sequentially."}
+                  >
+                    <span style={{ marginRight: 8 }}>Amount</span>
+                    <Icon type="info-circle" />
+                  </Tooltip>
+                }
+                style={{ marginTop: 16 }}
+              >
                 <Input
                   onChange={handleAmountChange}
                   placeholder="Amount"
                   value={amount}
+                  type="number"
+                />
+              </Label>
+              <Label
+                text={
+                  <Tooltip
+                    placement="right"
+                    title={"Time in milliseconds to wait after each request."}
+                  >
+                    <span style={{ marginRight: 8 }}>Wait (ms)</span>
+                    <Icon type="info-circle" />
+                  </Tooltip>
+                }
+                style={{ marginTop: 16 }}
+              >
+                <Input
+                  onChange={handleSleepTimeChange}
+                  placeholder="Sleep Time"
+                  value={sleepTime}
                   type="number"
                 />
               </Label>

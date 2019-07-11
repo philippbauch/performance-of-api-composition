@@ -50,7 +50,7 @@ const Input: React.ForwardRefExoticComponent<
       >
         {!disabled ? (
           <input
-            className="sprova-input"
+            className="input"
             onChange={onChange}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}

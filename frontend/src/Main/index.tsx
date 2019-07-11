@@ -2,13 +2,13 @@ import { Alert, Button } from "antd";
 import Chart from "chart.js";
 import _ from "lodash";
 import React, { useEffect } from "react";
-import { CSVDownload, CSVLink } from "react-csv";
+import { CSVLink } from "react-csv";
 import Card, { CardBody, CardFooter, CardHeader } from "../components/Card";
 import Level from "../components/Level";
 import Table, { TableColumn, TableRow } from "../components/Table";
+import { Protocol } from "../models/Protocol";
 import { Request } from "../models/Request";
 import "./index.scss";
-import { Protocol } from "../models/Protocol";
 
 interface Props {
   isRunning: boolean;

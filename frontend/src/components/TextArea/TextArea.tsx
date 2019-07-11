@@ -40,7 +40,7 @@ const TextArea: React.ForwardRefExoticComponent<
       >
         {!disabled ? (
           <textarea
-            className="sprova-textarea"
+            className="textarea"
             onChange={onChange}
             placeholder={placeholder}
             ref={ref}

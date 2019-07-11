@@ -1,6 +1,6 @@
 @import "../../styles/variables";
 
-.sprova-table {
+.table {
   width: 100%;
 
   &-row td,
@@ -18,7 +18,7 @@
   }
 
   &-body {
-    .sprova-table-row {
+    .table-row {
       &.is-clickable {
         &:hover {
           background-color: #e6f7ff;
