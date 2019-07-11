@@ -71,6 +71,7 @@ const Sider: React.FunctionComponent<Props> = ({
       setQueryContent(query.content);
       setQueryTitle(query.title);
     } else {
+      setCurrentQueryId(-1);
       setQueryContent("");
       setQueryTitle("");
     }
