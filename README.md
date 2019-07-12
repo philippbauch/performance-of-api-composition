@@ -17,9 +17,9 @@ The gateways and frontend in any case remain on your local machine.
 ## Prerequisits
 
 To be able to run the project on your computer, make sure you have the following components installed and set up:
-* docker
-* docker-compose
-* node
+* [Docker](https://www.docker.com)
+* [Docker Compose](https://docs.docker.com/compose)
+* [Node.js](https://nodejs.org)
 
 ## Run with services deployed on AWS
 
