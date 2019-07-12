@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config({
-  path: process.argv.includes("--local") ? ".env.local" : ".env"
+  path: process.argv.includes("--local") ? ".env.local" : ".env.prod"
 });
 
 import chalk from "chalk";
