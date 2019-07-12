@@ -1,4 +1,5 @@
 import { ApolloServer, gql } from "apollo-server";
+import responseCachePlugin from "apollo-server-plugin-response-cache";
 import logger from "./logger";
 import {
   reservationIdResolver,
@@ -12,7 +13,7 @@ import {
   restaurantReservationsResolver,
   restaurantResolver,
   restaurantReviewsResolver,
-  restaurantsResolver,
+  restaurantsResolver
 } from "./restaurant/restaurant.resolver";
 import {
   reviewIdResolver,
@@ -26,7 +27,7 @@ import {
   userReservationsResolver,
   userResolver,
   userReviewsResolver,
-  usersResolver,
+  usersResolver
 } from "./user/user.resolver";
 
 const DEFAULT_PORT = "8003";
@@ -127,8 +128,16 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers, tracing: true, cacheControl: { defaultMaxAge: 60 } });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  tracing: true,
+  // @ts-ignore
+  plugins: [responseCachePlugin()],
+  cacheControl: { defaultMaxAge: 30 }
+});
 
+// @ts-ignore
 server.listen(PORT).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });

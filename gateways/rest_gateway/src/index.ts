@@ -26,7 +26,7 @@ import {
   userReservationsResolver,
   userResolver,
   userReviewsResolver,
-  usersResolver,
+  usersResolver
 } from "./user/user.resolver";
 
 const DEFAULT_PORT = "8000";

@@ -134,7 +134,7 @@ const Sider: React.FunctionComponent<Props> = ({
         requests.push({
           ...partialRequest,
           ok: true,
-          duration: extensions.tracing.duration
+          duration: (extensions && extensions.tracing.duration) || 0
         });
       } catch (error) {
         requests.push({

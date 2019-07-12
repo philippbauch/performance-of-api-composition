@@ -1,4 +1,5 @@
 import { ApolloServer, gql } from "apollo-server";
+import responseCachePlugin from "apollo-server-plugin-response-cache";
 import logger from "./logger";
 import {
   reservationIdResolver,
@@ -12,7 +13,7 @@ import {
   restaurantReservationsResolver,
   restaurantResolver,
   restaurantReviewsResolver,
-  restaurantsResolver,
+  restaurantsResolver
 } from "./restaurant/restaurant.resolver";
 import {
   reviewIdResolver,
@@ -26,7 +27,7 @@ import {
   userReservationsResolver,
   userResolver,
   userReviewsResolver,
-  usersResolver,
+  usersResolver
 } from "./user/user.resolver";
 
 const DEFAULT_PORT = "8002";
@@ -39,7 +40,7 @@ if (!PORT) {
 }
 
 const typeDefs = gql`
-  type User @cacheControl(maxAge: 60) {
+  type User {
     id: ID
     email: String
     firstName: String
@@ -48,14 +49,14 @@ const typeDefs = gql`
     reviews: [Review]
   }
 
-  type Address @cacheControl(maxAge: 60) {
+  type Address {
     streetName: String
     houseNumber: Int
     city: String
     zipCode: String
   }
 
-  type Restaurant @cacheControl(maxAge: 60) {
+  type Restaurant {
     id: ID
     name: String
     address: Address
@@ -63,7 +64,7 @@ const typeDefs = gql`
     reservations: [Reservation]
   }
 
-  type Review @cacheControl(maxAge: 60) {
+  type Review {
     id: ID
     user: User
     restaurant: Restaurant
@@ -71,7 +72,7 @@ const typeDefs = gql`
     comment: String
   }
 
-  type Reservation @cacheControl(maxAge: 60) {
+  type Reservation {
     id: ID
     user: User
     restaurant: Restaurant
@@ -127,8 +128,16 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers, tracing: true, cacheControl: { defaultMaxAge: 60 } });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  tracing: true,
+  // @ts-ignore
+  plugins: [responseCachePlugin()],
+  cacheControl: { defaultMaxAge: 30 }
+});
 
+// @ts-ignore
 server.listen(PORT).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });

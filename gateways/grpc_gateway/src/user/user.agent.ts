@@ -7,7 +7,7 @@ const DEFAULT_USER_HOST = "localhost";
 const DEFAULT_USER_PORT = "4040";
 
 const { PROTO_PATH } = process.env;
-let { USER_HOST, USER_PORT,  } = process.env;
+let { USER_HOST, USER_PORT } = process.env;
 
 if (!USER_HOST) {
   logger.warn(
