@@ -9,12 +9,17 @@ or host everything locally yourself.
 
 The gateways and frontend in any case remain on your local machine.
 
-NOTE: This project has been developed and tested on a machine running macOS. I'm not quite sure if everything works fine
-on other operating system.
+> NOTE: The frontend of this project has been 
+> developed and tested in the Chrome browser. 
+> Some things might not work as in intended in 
+> other browsers.
 
 ## Prerequisits
 
-docker, docker-compose, node
+To be able to run the project on your computer, make sure you have the following components installed and set up:
+* docker
+* docker-compose
+* node
 
 ## Run with services deployed on AWS
 

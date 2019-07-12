@@ -1,11 +1,9 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "private": true,
   "dependencies": {
     "@types/chart.js": "^2.7.54",
     "@types/classnames": "^2.2.8",
-    "@types/jest": "24.0.15",
     "@types/lodash": "^4.14.135",
     "@types/node": "12.0.10",
     "@types/react": "16.8.22",
@@ -42,9 +40,7 @@
       "not op_mini all"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 chrome version"
     ]
   }
 }

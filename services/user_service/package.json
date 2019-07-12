@@ -1,12 +1,6 @@
 {
   "name": "user_service",
   "version": "1.0.0",
-  "description": "User Service",
-  "author": "Philipp Bauch",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/philippbauch/performance-of-api-composition"
-  },
   "scripts": {
     "build": "tsc",
     "build:clean": "rm -rf dist && npm run build",

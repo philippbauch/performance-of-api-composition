@@ -1,20 +1,13 @@
 {
   "name": "reservation_service",
   "version": "1.0.0",
-  "description": "Reservation Service",
-  "author": "Philipp Bauch",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/philippbauch/performance-of-api-composition"
-  },
   "scripts": {
     "build": "tsc",
     "build:clean": "rm -rf dist && npm run build",
     "build:watch": "tsc --watch",
     "dev": "concurrently \"npm:build:watch\" \"nodemon\"",
     "start": "node -r dotenv/config ./dist/index.js",
-    "sync:proto": "./sync_proto.sh",
-    "test": "node -r dotenv/config ./tests/index.js"
+    "sync:proto": "./sync_proto.sh"
   },
   "dependencies": {
     "@grpc/proto-loader": "^0.5.1",
