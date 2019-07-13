@@ -21,14 +21,12 @@ if (!REVIEW_PORT) {
 }
 
 const URL = `http://${REVIEW_HOST}:${REVIEW_PORT}/`;
-const TIMEOUT = 10000;
 
 const agent = axios.create({
   baseURL: URL,
   headers: {
     "Content-Type": "application/json"
-  },
-  timeout: TIMEOUT
+  }
 });
 
 export default agent;
