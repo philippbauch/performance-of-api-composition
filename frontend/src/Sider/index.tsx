@@ -56,11 +56,6 @@ const Sider: React.FunctionComponent<Props> = ({
     setValue: setQueryTitle,
     handleChange: handleQueryTitleChange
   } = useFormInput("");
-  const {
-    value: sleepTime,
-    setValue: setSleepTime,
-    handleChange: handleSleepTimeChange
-  } = useFormInput("0");
 
   const handleProtocolChange = (protocol: number) => {
     if (protocol === currentProtocol) {
@@ -101,7 +96,6 @@ const Sider: React.FunctionComponent<Props> = ({
     setCurrentQueryId(-1);
     setQueryContent("");
     setQueryTitle("");
-    setSleepTime("0");
   };
 
   const chooseClient = (): GraphQLClient => {
@@ -134,9 +128,6 @@ const Sider: React.FunctionComponent<Props> = ({
         });
       }
       setProgress(((id + 1) / Number(amount)) * 100);
-      if (id < Number(amount) - 1) {
-        await sleep(Number(sleepTime));
-      }
     }
     onRequests(requests);
     onStopRunning();
@@ -226,25 +217,6 @@ const Sider: React.FunctionComponent<Props> = ({
                   onChange={handleAmountChange}
                   placeholder="Amount"
                   value={amount}
-                  type="number"
-                />
-              </Label>
-              <Label
-                text={
-                  <Tooltip
-                    placement="right"
-                    title={"Time in milliseconds to wait after each request."}
-                  >
-                    <span style={{ marginRight: 8 }}>Wait (ms)</span>
-                    <Icon type="info-circle" />
-                  </Tooltip>
-                }
-                style={{ marginTop: 16 }}
-              >
-                <Input
-                  onChange={handleSleepTimeChange}
-                  placeholder="Sleep Time"
-                  value={sleepTime}
                   type="number"
                 />
               </Label>
