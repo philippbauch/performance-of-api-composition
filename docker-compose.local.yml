@@ -132,27 +132,6 @@ services:
       USER_HOST: user-service
       USER_PORT: 8080
 
-  rest-cached-gateway:
-    build: gateways/rest_cached_gateway
-    depends_on: 
-      - user-service
-      - restaurant-service
-      - reservation-service
-      - review-service
-    restart: always
-    ports:
-      - 8002:8002
-    environment:
-      PORT: 8002
-      RESERVATION_HOST: reservation-service
-      RESERVATION_PORT: 8082
-      RESTAURANT_HOST: restaurant-service
-      RESTAURANT_PORT: 8081
-      REVIEW_HOST: review-service
-      REVIEW_PORT: 8083
-      USER_HOST: user-service
-      USER_PORT: 8080
-
   grpc-gateway:
     build: gateways/grpc_gateway
     depends_on: 
@@ -175,37 +154,13 @@ services:
       USER_PORT: 4040
       PROTO_PATH: /usr/src/app/proto
 
-  grpc-cached-gateway:
-    build: gateways/grpc_cached_gateway
-    depends_on: 
-      - user-service
-      - restaurant-service
-      - reservation-service
-      - review-service
-    restart: always
-    ports:
-      - 8003:8003
-    environment:
-      PORT: 8003
-      RESERVATION_HOST: reservation-service
-      RESERVATION_PORT: 4042
-      RESTAURANT_HOST: restaurant-service
-      RESTAURANT_PORT: 4041
-      REVIEW_HOST: review-service
-      REVIEW_PORT: 4043
-      USER_HOST: user-service
-      USER_PORT: 4040
-      PROTO_PATH: /usr/src/app/proto
-
   ### Frontend ###
   
   frontend:
     build: frontend
     depends_on:
       - rest-gateway
-      - rest-cached-gateway
       - grpc-gateway
-      - grpc-cached-gateway
     restart: always
     ports:
       - 3000:80

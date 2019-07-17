@@ -19,22 +19,6 @@ services:
       USER_HOST: ec2-3-122-59-179.eu-central-1.compute.amazonaws.com
       USER_PORT: 8000
 
-  rest-cached-gateway:
-    build: gateways/rest_cached_gateway
-    restart: always
-    ports:
-      - 8002:8002
-    environment:
-      PORT: 8002
-      RESERVATION_HOST: ec2-52-59-18-115.eu-central-1.compute.amazonaws.com
-      RESERVATION_PORT: 8000
-      RESTAURANT_HOST: ec2-18-197-90-209.eu-central-1.compute.amazonaws.com
-      RESTAURANT_PORT: 8000
-      REVIEW_HOST: ec2-35-159-46-195.eu-central-1.compute.amazonaws.com
-      REVIEW_PORT: 8000
-      USER_HOST: ec2-3-122-59-179.eu-central-1.compute.amazonaws.com
-      USER_PORT: 8000
-
   grpc-gateway:
     build: gateways/grpc_gateway
     restart: always
@@ -52,32 +36,13 @@ services:
       USER_PORT: 4000
       PROTO_PATH: /usr/src/app/proto
 
-  grpc-cached-gateway:
-    build: gateways/grpc_cached_gateway
-    restart: always
-    ports:
-      - 8003:8003
-    environment:
-      PORT: 8003
-      RESERVATION_HOST: ec2-52-59-18-115.eu-central-1.compute.amazonaws.com
-      RESERVATION_PORT: 4000
-      RESTAURANT_HOST: ec2-18-197-90-209.eu-central-1.compute.amazonaws.com
-      RESTAURANT_PORT: 4000
-      REVIEW_HOST: ec2-35-159-46-195.eu-central-1.compute.amazonaws.com
-      REVIEW_PORT: 4000
-      USER_HOST: ec2-3-122-59-179.eu-central-1.compute.amazonaws.com
-      USER_PORT: 4000
-      PROTO_PATH: /usr/src/app/proto
-
   ### Frontend ###
 
   frontend:
     build: frontend
     depends_on:
       - rest-gateway
-      - rest-cached-gateway
       - grpc-gateway
-      - grpc-cached-gateway
     restart: always
     ports:
       - 3000:80
