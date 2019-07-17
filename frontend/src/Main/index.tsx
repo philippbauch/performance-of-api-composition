@@ -114,7 +114,9 @@ const Main: React.FunctionComponent<Props> = ({
   }, [requests]);
 
   const getFilename = () => {
-    return `requests-${Protocol.REST ? "rest" : "grpc"}`;
+    return `requests-${
+      requests[0].protocol === Protocol.REST ? "rest" : "grpc"
+    }`;
   };
 
   const formatExportData = () => {
