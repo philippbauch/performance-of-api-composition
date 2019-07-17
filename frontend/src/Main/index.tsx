@@ -114,15 +114,12 @@ const Main: React.FunctionComponent<Props> = ({
   }, [requests]);
 
   const getFilename = () => {
-    const protocol = requests[0].protocol === Protocol.REST ? "rest" : "grpc";
-    const cached = requests[0].caching ? "-cached" : "";
-    return `requests-${protocol}${cached}`;
+    return `requests-${Protocol.REST ? "rest" : "grpc"}`;
   };
 
   const formatExportData = () => {
     return requests.map((request: Request) => ({
       ...request,
-      caching: request.caching ? 1 : 0,
       ok: request.ok ? 1 : 0,
       protocol: request.protocol === Protocol.REST ? "REST" : "GRPC"
     }));
@@ -228,14 +225,7 @@ const Main: React.FunctionComponent<Props> = ({
                 <CSVLink
                   filename={getFilename()}
                   data={formatExportData()}
-                  headers={[
-                    "timestamp",
-                    "id",
-                    "duration",
-                    "ok",
-                    "protocol",
-                    "caching"
-                  ]}
+                  headers={["timestamp", "id", "duration", "ok", "protocol"]}
                 >
                   Export
                 </CSVLink>

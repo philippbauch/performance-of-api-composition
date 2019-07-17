@@ -1,9 +1,7 @@
 import { Button, Icon, Progress, Select, Spin, Switch, Tooltip } from "antd";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import grpcCachedAgent from "../api/grpc-cached.agent";
 import grpcAgent from "../api/grpc.agent";
-import restCachedAgent from "../api/rest-cached.agent";
 import restAgent from "../api/rest.agent";
 import Card, { CardBody, CardHeader } from "../components/Card";
 import Input from "../components/Input";
@@ -16,6 +14,7 @@ import { Protocol } from "../models/Protocol";
 import { Query } from "../models/Query";
 import { Request } from "../models/Request";
 import "./index.scss";
+import { GraphQLClient } from "graphql-request";
 
 const Option = Select.Option;
 
@@ -45,7 +44,6 @@ const Sider: React.FunctionComponent<Props> = ({
     Protocol.REST
   );
   const [currentQueryId, setCurrentQueryId] = useState<number>(-1);
-  const [isCaching, setIsCaching] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
   const [queries, setQueries] = useState<Query[]>([]);
   const {
@@ -101,33 +99,25 @@ const Sider: React.FunctionComponent<Props> = ({
     setAmount("10");
     setCurrentProtocol(Protocol.REST);
     setCurrentQueryId(-1);
-    setIsCaching(false);
     setQueryContent("");
     setQueryTitle("");
     setSleepTime("0");
   };
 
-  const chooseClient = () => {
-    return currentProtocol === Protocol.REST
-      ? isCaching
-        ? restCachedAgent
-        : restAgent
-      : isCaching
-      ? grpcCachedAgent
-      : grpcAgent;
+  const chooseClient = (): GraphQLClient => {
+    return currentProtocol === Protocol.REST ? restAgent : grpcAgent;
   };
 
   const runQuery = async () => {
     onStartRunning();
-    const client: any = chooseClient();
+    const client: GraphQLClient = chooseClient();
     const requests: Request[] = [];
     for (let id = 0; id < Number(amount); id++) {
       const timestamp = Date.now();
       const partialRequest = {
         id,
         timestamp,
-        protocol: currentProtocol,
-        caching: isCaching
+        protocol: currentProtocol
       };
       try {
         const { extensions } = await client.rawRequest(queryContent);
@@ -219,15 +209,6 @@ const Sider: React.FunctionComponent<Props> = ({
                   <Option value={Protocol.REST}>REST</Option>
                   <Option value={Protocol.GRPC}>gRPC</Option>
                 </Select>
-              </Label>
-              <Label text="Enable Caching" style={{ marginTop: 16 }}>
-                <Switch
-                  disabled={isRunning}
-                  checked={isCaching}
-                  onChange={(enableCaching: boolean) =>
-                    setIsCaching(enableCaching)
-                  }
-                />
               </Label>
               <Label
                 text={

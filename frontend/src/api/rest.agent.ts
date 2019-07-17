@@ -11,8 +11,6 @@ if (!REACT_APP_REST_PORT) {
   REACT_APP_REST_PORT = DEFAULT_REACT_APP_REST_PORT;
 }
 
-const client = new GraphQLClient(
-  `http://localhost:${REACT_APP_REST_PORT}`
-);
+const client = new GraphQLClient(`http://localhost:${REACT_APP_REST_PORT}`);
 
 export default client;

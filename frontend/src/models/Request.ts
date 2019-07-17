@@ -6,5 +6,4 @@ export interface Request {
   duration: number;
   timestamp: number;
   protocol: Protocol;
-  caching: boolean;
 }
