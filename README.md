@@ -62,3 +62,5 @@ termination. If you want to persist the data and volumes that are used by the da
 
 If you run everything on your local machine the generator requires the exact same steps to install dependencies and build the project. After this, you then have to run `npm run start:local` to tell the generator to communicate with the services
 and are deployed locally on your machine.
+
+## Known issues
